@@ -77,7 +77,12 @@ void putnl(void);
 
 char getc(void);
 
-uint8_t* __fastcall__ fe_decode_lzg(uint8_t* source, uint8_t* dest);
+// Decompress a ZX02 compressed binary stream
+void __fastcall__ fe_decompress(uint8_t* source, uint8_t* dest);
+
+// This will return a pointer to the end of the decompressed stream.
+// I know, this is ugly...
+uint8_t* __fastcall__ fe_decompress_get_end(void);
 
 
 // Global zero-page variables we can use

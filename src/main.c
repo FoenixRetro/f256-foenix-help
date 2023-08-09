@@ -10,7 +10,7 @@ typedef struct {
 
 extern doc_t* documents;
 
-uint8_t* document_text = (uint8_t*)0x8000;
+uint8_t* document_text = (uint8_t*)0x7000;
 uint8_t* document_page_start[256];
 uint8_t document_page;
 uint8_t document_page_count;
@@ -56,7 +56,9 @@ void draw_document_page(void) {
 
 void show_document(void) {
 	uint16_t line;
-	uint8_t* end = fe_decode_lzg(documents[current_document].source, document_text);
+	uint8_t* end = NULL;
+	fe_decompress(documents[current_document].source, document_text);
+	end = fe_decompress_get_end();
 	document_page = 0;
 
 	// Locate all the different pages

@@ -1,4 +1,3 @@
-INTRODUCTION
 
 This document is not a tutorial and assumes the reader has some knowledge of
 programming in general and BASIC in particular.

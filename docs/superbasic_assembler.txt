@@ -1,4 +1,3 @@
-INLINE ASSEMBLY
 
 SuperBASIC has a built in inline assembler, that is closely modelled on that of
 BASIC in the British Acorn machines (Atom, BBC Micro, Archimedes).
