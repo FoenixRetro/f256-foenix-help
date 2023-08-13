@@ -3,18 +3,37 @@
 
 #include <string.h>
 
+#define DOC_LINK_COUNT 	26
+
 typedef struct {
 	char* title;
 	uint8_t* source;
 } doc_t;
 
-extern doc_t* documents;
+typedef struct {
+	uint16_t magic;
+	char* copyrights;
+	doc_t* start_doc;
+	doc_t* end_doc;
+} document_pack_t;
+
+
+typedef struct {
+	uint8_t index;
+	uint8_t segment;
+} doc_link_t;
+
+
+doc_link_t all_doc_links[DOC_LINK_COUNT];
+uint8_t document_count;
 
 uint8_t* document_text = (uint8_t*)0x7000;
 uint8_t* document_page_start[256];
 uint8_t document_page;
 uint8_t document_page_count;
-uint8_t current_document;
+uint8_t current_link_index;
+
+document_pack_t* current_pack = (document_pack_t*)FE_TEMP_ADDR;
 
 
 void title(const char* name) {
@@ -22,7 +41,8 @@ void title(const char* name) {
 
 	at(0, 0);
 	color(0x01);
-	puts("  ");
+	putc(' ');
+	putc(' ');
 	puts(name);
 
 	for (index1 = len + 2; index1 < 80; ++index1) {
@@ -30,34 +50,53 @@ void title(const char* name) {
 	}
 }
 
-void draw_document_page(void) {
-	uint8_t* end = document_page_start[document_page + 1];
-	ptr1 = document_page_start[document_page];
-
-	clear();
-	title(documents[current_document].title);
+void draw_document_footer(void) {
+	uint16_t len = strlen(current_pack->copyrights);
+	at(0, 59);
 	color(0x01);
-	at(60, 0);
+
+	putc(' ');
+	putc(' ');
+	puts(current_pack->copyrights);
+
+	for (index1 = len + 2; index1 < 80; ++index1) {
+		putc(' ');
+	}
+
+	at(60, 59);
 	puth16(document_page + 1);
 	putc('/');
 	puth16(document_page_count);
 	color(0x10);
-	at(0, 1);
-
-	while (ptr1 != end) {
-		if (ptr1[0] == '\n')
-			putnl();
-		else
-			putc(ptr1[0]);
-
-		++ptr1;
-	}
 }
 
-void show_document(void) {
+void draw_document_page(void) {
+	uint8_t* end = document_page_start[document_page + 1];
+
+	clear();
+	title(current_pack->start_doc[all_doc_links[current_link_index].index].title);
+	color(0x10);
+	at(0, 1);
+	ptr0 = document_page_start[document_page];
+
+	while (ptr0 != end) {
+		if (ptr0[0] == '\n')
+			putnl();
+		else
+			putc(ptr0[0]);
+
+		++ptr0;
+	}
+
+	draw_document_footer();
+}
+
+void document(void) {
 	uint16_t line;
 	uint8_t* end = NULL;
-	fe_decompress(documents[current_document].source, document_text);
+
+	fe_map(all_doc_links[current_link_index].segment);
+	fe_decompress(current_pack->start_doc[all_doc_links[current_link_index].index].source, document_text);
 	end = fe_decompress_get_end();
 	document_page = 0;
 
@@ -70,7 +109,7 @@ void show_document(void) {
 	while (ptr0 != end && index0 < 254) {
 		if (ptr0[0] == '\n') {
 			++line;
-			if (line == 58) {
+			if (line == 56) {
 				document_page_start[index0] = ptr0;
 				line = 0;
 				++index0;
@@ -105,22 +144,32 @@ void show_document(void) {
 
 
 static void draw_menu(void) {
-	doc_t* it = documents;
 	clear();
 	title("Foenix Documentation");
 	at(0, 2);
 	color(0x10);
 
-	index0 = 0;
-	while (it->title != NULL && index0 < 26) {
-		puts("  ");
-		putc(index0 + 'A');
-		puts(")   ");
-		puts(it->title);
+	document_count = 0;
+	for (index0 = FE_FLASH_SECTOR_START; index0 < FE_FLASH_SECTOR_END && document_count < DOC_LINK_COUNT; ++index0) {
+		fe_map(index0);
 
-		putnl();
-		++it;
-		++index0;
+		if (current_pack->magic == 0xABD0) {
+			doc_t* it = current_pack->start_doc;
+
+			while (it != current_pack->end_doc && document_count < DOC_LINK_COUNT) {
+				all_doc_links[document_count].segment = index0;
+				all_doc_links[document_count].index = it - current_pack->start_doc;
+
+				puts("  ");
+				putc(document_count + 'A');
+				puts(")   ");
+				puts(it->title);
+				putnl();
+
+				++document_count;
+				++it;
+			}
+		}
 	}
 
 	putnl();
@@ -128,7 +177,7 @@ static void draw_menu(void) {
 	puts("  Esc) Quit");
 }
 
-void show_menu(void) {
+void menu(void) {
 	draw_menu();
 
 	while (true) {
@@ -138,14 +187,14 @@ void show_menu(void) {
 			return;
 		}
 
-		current_document = 0xFF;
+		current_link_index = 0xFF;
 
-		if ((ch >= 'a' && ch < ('a' + index0))) {
-			current_document = ch - 'a';
+		if ((ch >= 'a' && ch < ('a' + document_count))) {
+			current_link_index = ch - 'a';
 		}
 
-		if (current_document != 0xFF) {
-			show_document();
+		if (current_link_index != 0xFF) {
+			document();
 			draw_menu();
 		}
 	}
@@ -154,5 +203,5 @@ void show_menu(void) {
 
 void main(void) {
 	fe_init();
-	show_menu();
+	menu();
 }

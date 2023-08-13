@@ -12,13 +12,18 @@ _documents:
 documents_array:
 	.word	superbasic_intro_title
 	.word 	superbasic_intro
+	.word 	0
 	.word 	superbasic_programs_title
 	.word	superbasic_programs
+	.word 	0
 	.word 	superbasic_graphics_title
 	.word 	superbasic_graphics
+	.word 	0
 	.word 	superbasic_assembler_title
 	.word	superbasic_assembler
 	.word 	0
+	.word 	0
+	.word	0
 	.word	0
 
 

@@ -30,6 +30,7 @@ The latter is the most flexible. BASIC simplifies the graphics system to some
 extent to make it easier to use ; for example, the Junior can have up to three
 bitmaps, but only one is supported using BASIC commands.
 
+
 GRAPHICS MODIFIERS AND ACTIONS
 
 Following drawing commands PLOT, LINE, RECT, CIRCLE, SPRITE, CHAR and IMAGE
@@ -70,7 +71,6 @@ Some lines:
 | 100 bitmap on:cls:bitmap clear 3
 | 110 line colour $1E from 10,10 to 100,200 to 200,50 to 10,10 by 0,20
 
-
 Note how you can chain commands  and also the use of the relevant position
 "by" which means from here.
 
@@ -79,14 +79,12 @@ Some circles:
 | 100 bitmap on:cls:bitmap clear 3
 | 110 circle solid colour $1E outline 10,10 to 200,200 solid 10,10 to 30,30
 
-
 Rectangles are the same. Currently we cannot draw ellipses.
 
 Some text:
 
 | 100 bitmap on:cls:bitmap clear 3
 | 110 text "Hello there" dim 1 colour $FC to 10,10 dim 3 to 10,40
-
 
 Drawing text from the font library in Vicky. These characters can be redefined.
 
@@ -96,7 +94,6 @@ Some pixels:
 | 110 repeat
 | 120 plot color random(256) to random(320),random(230)
 | 130 until false
-
 
 Press break to stop this one. Note you have to write "Plot To" here.
 

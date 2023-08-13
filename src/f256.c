@@ -82,45 +82,12 @@ void fe_setup_text_palette(fe_color_t* palette, uint8_t count) {
 	}
 }
 
-void fe_map(uint8_t bank) {
-	FE_MMU_LUT[FE_TEMP_BANK] = bank;
+void fe_map(uint8_t sector) {
+	FE_MMU_LUT[FE_TEMP_BANK] = sector;
 }
 
 void fe_unmap(void) {
-	FE_MMU_LUT[FE_TEMP_BANK] = FE_DEFAULT_BANK;
-}
-
-static void display_scroll(void) {
-	int saved0 = index0;
-	int saved1 = index1;
-	int saved2 = (int)ptr0;
-
-    ptr0 = FE_TEXT_MATRIX;
-
-	*FE_MMU_IO_CTRL = FE_PAGE_TEXT;
-    for (index1 = 0; index1 < 80*59; ++index1) {
-        ptr0[index1] = ptr0[index1+80];
-    }
-
-    ptr0 += index1;
-    for (index0 = 0; index0 < 80; index0++) {
-        *ptr0++ = ' ';
-    }
-
-   	ptr0 = FE_TEXT_MATRIX;
-	*FE_MMU_IO_CTRL = FE_PAGE_COLOR;
-    for (index1 = 0; index1 < 80*59; ++index1) {
-        ptr0[index1] = ptr0[index1+80];
-    }
-
-    ptr0 += index1;
-    for (index0 = 0; index0 < 80; index0++) {
-        *ptr0++ = _text_color;
-    }
-
-    index0 = saved0;
-    index1 = saved1;
-    ptr0 = (uint8_t*)saved2;
+	FE_MMU_LUT[FE_TEMP_BANK] = FE_DEFAULT_SECTOR;
 }
 
 void clear(void) {
@@ -156,13 +123,12 @@ void putc(char ch) {
 	if (_row == 60) {
 		_row = 59;
 		_text_ptr -= 80;
-		display_scroll();
 	}
 }
 
 void puts(const char* str) {
-	while (*str) {
-		putc(*str);
+	while (str[0]) {
+		putc(str[0]);
 		++str;
 	}
 }
@@ -192,7 +158,6 @@ void putnl(void) {
 	if (_row == 60) {
 		_row = 59;
 		_text_ptr -= 80;
-		display_scroll();
 	}
 }
 
@@ -209,7 +174,7 @@ char getc(void) {
 		CALL(NextEvent);
 
         if (event.type == EVENT(key.PRESSED)) {
-        	if (!_key_pressed[event.key.ascii]) {
+        	if (!_key_pressed[event.key.ascii] && event.key.ascii > 0) {
         		_key_pressed[event.key.ascii] = true;
         		return event.key.ascii;
         	}

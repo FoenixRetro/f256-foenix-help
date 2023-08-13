@@ -36,15 +36,18 @@
 #define FE_VKY_CURSOR_CTRL		((uint8_t*)0xD010)
 
 #define FE_TEMP_BANK			(5)						// address 0xA000 - 0xBFFF can be used to swap out memory
-#define FE_DEFAULT_BANK			(5)
+#define FE_DEFAULT_SECTOR		(5)
 #define FE_TEMP_ADDR			((uint8_t*)0xA000)
 #define FE_TEMP_SIZE			(0x2000)
 
-#define FE_ADDR_BANK(addr)		(((addr) >> 13) & 0xFF)
-#define FE_BANK2ADDR(bank)		(((uint32_t)bank) << 13)
-#define FE_ADDR_LOW(addr)		((addr) & 0xFF)
-#define FE_ADDR_MID(addr)		(((addr) >> 8) & 0xFF)
-#define FE_ADDR_HIGH(addr)		(((addr) >> 16) & 0xFF)
+#define FE_FLASH_SECTOR_START	0x40
+#define FE_FLASH_SECTOR_END		0x78
+
+#define FE_ADDR_BANK(addr)			(((addr) >> 13) & 0xFF)
+#define FE_BANK2ADDR(bank)			(((uint32_t)bank) << 13)
+#define FE_ADDR_LOW(addr)			((addr) & 0xFF)
+#define FE_ADDR_MID(addr)			(((addr) >> 8) & 0xFF)
+#define FE_ADDR_HIGH(addr)			(((addr) >> 16) & 0xFF)
 #define FE_SET_ADDR(target, addr)	(target)->addr_low = FE_ADDR_LOW(addr);  \
 									(target)->addr_mid = FE_ADDR_MID(addr);  \
 									(target)->addr_high = FE_ADDR_HIGH(addr)
@@ -59,7 +62,7 @@ typedef struct {
 
 void fe_init(void);
 
-void fe_map(uint8_t system_bank);
+void fe_map(uint8_t sector);
 void fe_unmap(void);
 
 void fe_setup_text_palette(fe_color_t* palette, uint8_t count);
@@ -89,12 +92,10 @@ uint8_t* __fastcall__ fe_decompress_get_end(void);
 extern uint8_t index0;
 extern uint16_t index1;
 extern uint8_t* ptr0;
-extern uint8_t* ptr1;
 
 #pragma zpsym ("index0");
 #pragma zpsym ("index1");
 #pragma zpsym ("ptr0");
-#pragma zpsym ("ptr1");
 
 
 #endif
