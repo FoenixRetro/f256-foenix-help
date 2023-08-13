@@ -53,19 +53,10 @@
 									(target)->addr_high = FE_ADDR_HIGH(addr)
 
 
-typedef struct {
-	uint8_t r;
-	uint8_t g;
-	uint8_t b;
-} fe_color_t;
+void initialize(void);
 
-
-void fe_init(void);
-
-void fe_map(uint8_t sector);
-void fe_unmap(void);
-
-void fe_setup_text_palette(fe_color_t* palette, uint8_t count);
+void map(uint8_t sector);
+void unmap(void);
 
 void clear(void);
 void color(uint8_t c);
@@ -73,6 +64,7 @@ void at(uint8_t x, uint8_t y);
 
 void putc(char ch);
 void puts(const char* str);
+void puti(int value);
 void puth8(uint8_t value);
 void puth16(uint16_t value);
 void puth32(uint32_t value);
@@ -81,11 +73,11 @@ void putnl(void);
 char getc(void);
 
 // Decompress a ZX02 compressed binary stream
-void __fastcall__ fe_decompress(uint8_t* source, uint8_t* dest);
+void __fastcall__ decompress(uint8_t* source, uint8_t* dest);
 
 // This will return a pointer to the end of the decompressed stream.
 // I know, this is ugly...
-uint8_t* __fastcall__ fe_decompress_get_end(void);
+uint8_t* __fastcall__ decompress_get_end(void);
 
 
 // Global zero-page variables we can use

@@ -3,6 +3,7 @@
 #include "microkernel.h"
 
 #include <string.h>
+#include <stdlib.h>
 
 // The event struct is allocated in crt0.
 extern struct event_t event;
@@ -21,7 +22,7 @@ static uint8_t _text_color;
 static bool _key_pressed[256];
 
 
-void fe_init(void) {
+void initialize(void) {
 	uint8_t current, active;
 	_text_ptr = FE_TEXT_MATRIX;
 	_column = 0;
@@ -62,31 +63,11 @@ void fe_init(void) {
 	memset(_key_pressed, 0, sizeof(_key_pressed));
 }
 
-void fe_setup_text_palette(fe_color_t* palette, uint8_t count) {
-	*FE_MMU_IO_CTRL = FE_PAGE_REGISTERS;
-
-	ptr0 = FE_FOREGROUND_LUT;
-	for (index0 = 0; index0 < count; ++index0) {
-		ptr0[0] = palette[index0].b;
-		ptr0[1] = palette[index0].g;
-		ptr0[2] = palette[index0].r;
-		ptr0 += 4;
-	}
-
-	ptr0 = FE_BACKGROUND_LUT;
-	for (index0 = 0; index0 < count; ++index0) {
-		ptr0[0] = palette[index0].b;
-		ptr0[1] = palette[index0].g;
-		ptr0[2] = palette[index0].r;
-		ptr0 += 4;
-	}
-}
-
-void fe_map(uint8_t sector) {
+void map(uint8_t sector) {
 	FE_MMU_LUT[FE_TEMP_BANK] = sector;
 }
 
-void fe_unmap(void) {
+void unmap(void) {
 	FE_MMU_LUT[FE_TEMP_BANK] = FE_DEFAULT_SECTOR;
 }
 
@@ -132,6 +113,31 @@ void puts(const char* str) {
 		++str;
 	}
 }
+void puti(int value) {
+	static char buffer[16];
+
+	if (value == 0) {
+		putc('0');
+	} else {
+		if (value < 0) {
+			putc('-');
+			value = value * -1;
+		}
+
+		index0 = 15;
+		while (value != 0 && index0 > 0) {
+			buffer[index0] = '0' + value % 10;
+			value = value / 10;
+			--index0;
+		}
+
+		++index0;
+		while (index0 < 16) {
+			putc(buffer[index0]);
+			++index0;
+		}
+	}
+}
 
 void puth8(uint8_t value) {
 	static char nibble[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
@@ -166,8 +172,6 @@ void at(uint8_t x, uint8_t y) {
 	_row = y;
 	_text_ptr = FE_TEXT_MATRIX + y * 80;
 }
-
-
 
 char getc(void) {
 	while (true) {

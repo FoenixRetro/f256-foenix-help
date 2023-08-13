@@ -63,10 +63,10 @@ void draw_document_footer(void) {
 		putc(' ');
 	}
 
-	at(60, 59);
-	puth16(document_page + 1);
+	at(71, 59);
+	puti(document_page + 1);
 	putc('/');
-	puth16(document_page_count);
+	puti(document_page_count);
 	color(0x10);
 }
 
@@ -95,9 +95,9 @@ void document(void) {
 	uint16_t line;
 	uint8_t* end = NULL;
 
-	fe_map(all_doc_links[current_link_index].segment);
-	fe_decompress(current_pack->start_doc[all_doc_links[current_link_index].index].source, document_text);
-	end = fe_decompress_get_end();
+	map(all_doc_links[current_link_index].segment);
+	decompress(current_pack->start_doc[all_doc_links[current_link_index].index].source, document_text);
+	end = decompress_get_end();
 	document_page = 0;
 
 	// Locate all the different pages
@@ -151,7 +151,7 @@ static void draw_menu(void) {
 
 	document_count = 0;
 	for (index0 = FE_FLASH_SECTOR_START; index0 < FE_FLASH_SECTOR_END && document_count < DOC_LINK_COUNT; ++index0) {
-		fe_map(index0);
+		map(index0);
 
 		if (current_pack->magic == 0xABD0) {
 			doc_t* it = current_pack->start_doc;
@@ -202,6 +202,6 @@ void menu(void) {
 
 
 void main(void) {
-	fe_init();
+	initialize();
 	menu();
 }

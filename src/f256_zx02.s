@@ -11,8 +11,8 @@
 ; Code under MIT license, see LICENSE file.
 
 
-              .export _fe_decompress
-              .export _fe_decompress_get_end
+              .export _decompress
+              .export _decompress_get_end
 
               .include "zeropage.inc"
 
@@ -27,7 +27,7 @@ pntr:         .res 2
 
               .code
 
-              .proc _fe_decompress_get_end: near
+              .proc _decompress_get_end: near
 
               lda ZX0_dst
               ldx ZX0_dst+1
@@ -39,7 +39,7 @@ pntr:         .res 2
 ; Decompress ZX0 data (6502 optimized format)
 
 
-              .proc _fe_decompress: near
+              .proc _decompress: near
 
               ; Setup arguments
               sta ZX0_dst
