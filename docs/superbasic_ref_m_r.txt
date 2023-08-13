@@ -1,0 +1,193 @@
+
+KEYWORD: max() min()
+Returns the largest or smallest of the parameters, there can be any number of
+these (at least one). You can’t mix strings and integers.
+
+    100 print max(3,42,5)
+
+
+KEYWORD: mdelta
+Gets the current delta status of the PS/2 mouse. 6 reference parameters
+(normally integer variables) are provided. These provide the cumulative mouse
+changes in the x,y,z axes, and the number of times the left, middle and right
+buttons have been pressed.
+
+    100 mdelta dx,dy,dz,lmb,mmb,rmb
+
+
+KEYWORD: memcopy
+This command is an interface to the F256 Junior's DMA hardware. A MEMCOPY
+command has several formats.
+The first in line 100 is a straight linear copy of memory from $10000 to $18000
+of length $4000. The second in line 110 is a linear fill from $10000 , to $4000
+bytes on, with the byte value $F7
+The third in line 120 is a rectangular area of memory, 64 x 48 pixels or bytes,
+from $10000. The 320 is the characters per line, normally 320 for the Junior.
+This copies a 2D area of screen memory rather than a linear one.
+The fourth, line 130 is a window, as defined, being filled with the byte
+pattern $18.
+The final shows an alternate way of showing addresses. This makes use of the
+knowledge that this normally video memory - it doesn't have to be of course
+- at 32,32 and at 128,128 later, convert to the addresses of those pixels in
+bitmap memory.
+
+    100 memcopy $10000,$4000 to $18000
+    110 memcopy $10000,$4000 poke $F7
+    120 memcopy $10000 rect 64,48 by 320 to $18000
+    130 memcopy $10000 rect 64,48 by 320 poke $18
+    140 memcopy at 32,32 rect 64,48 by 320 to at 128,128
+
+
+KEYWORD: mid$()
+Returns a subsegment of a string, given the start position
+(first character is 1) and the length, so mid$("abcdef",3,2) returns "cd".
+
+    100 print mid$("hello",2,3)
+    110 print mid$("another word",2,99)
+
+
+KEYWORD: mouse
+Gets the current status of the PS/2 mouse. 6 reference parameters
+(normally integer variables) are provided. These provide the current mouse
+position in the x,y,z axes, and the status of times the left, middle and
+right buttons.
+
+    100 mouse x,y,z,isx,isy,isz
+
+
+KEYWORD: new
+Erases the current program
+
+
+    100 new
+
+
+KEYWORD: not()
+Unary operator returning the logical not of its parameter, e.g. 0 if non-zero
+-1 otherwise.
+
+    100 print not(42)
+
+
+KEYWORD: option
+Option is used for general control functions which are not common enough to
+justify their own keyword.
+Option 0-7 set highlighting colours for Comment Foreground, Comment Background,
+Line Number, Token, Constant, Identifier, Punctuation, Data respectively, the
+lower 4 bits setting the colour. Setting the upper bit 7 will disable the
+background change. (The example sets the listing to all white)
+
+    100 for i = 0 to 7:option i,128+15:next
+
+
+KEYWORD: palette
+Sets the graphics palette. The parameters are the colour id and the red,
+green and blue graphics component. On start up, the palette is rrrgggbb
+
+    100 palette 1,255,128,0
+
+
+KEYWORD: peek() peekw() peekl() peekd()
+The peek, peekw, peekl and peekd functions retrieve 1-4 bytes from the
+6502 memory space.
+
+    100 print peekd(42),peek(1)
+
+
+KEYWORD: playing()
+Returns true if a channel is currently playing a sound.
+
+    100 print playing(0)
+
+
+KEYWORD: plot
+Plot a point in the current colour using the standard syntax which is described
+in the graphics section.
+
+    100 plot to 100,200
+
+
+KEYWORD: poke pokew pokel poked
+The poke, pokew, pokel and poked functions write one to four bytes to the
+6502 memory space.
+
+    100 poke 4096,1: pokew $c004,$a705
+
+
+KEYWORD: print
+Prints to the current output device, either strings or numbers (which are
+preceded by a space). Print a ‘ goes to the next line. Print a , goes to the
+next tab stop. A return is printed unless the command ends in ; or , .
+
+    100 print 42,"hello"’"world"
+
+
+KEYWORD: proc endproc
+Simple procedures. These should be used rather than gosub. Or else.  The
+empty brackets are mandatory even if there aren’t any parameters
+(the aim is to use value parameters).
+
+    100 printmessage("hello",42)
+    110 end
+    120 proc printmessage(msg$,n)
+    130 print msg$+"world  x "+str$(n)
+    140 endproc
+
+
+KEYWORD: rnd() random()
+Generates random numbers. this has two forms, which is still many fewer than
+odo. rnd() behaves like Microsoft basic, negative numbers set the seed,
+0 repeats the last value, and positive numbers return an integer 0 <= n < 1.
+random(n) returns a number from 0 to n-1
+
+    100 print rnd(1),random(6)
+
+
+KEYWORD: read / data
+Reads from DATA statements the types must match. For syntactic consistency,
+string data must be in quote marks
+
+    100 read a$,b
+    110 data "hello world"
+    120 data 59
+
+
+KEYWORD: rect
+Draws a rectangle, using the standard syntax described in the graphics section
+
+    100 rect 100,100 colour $ff to 200,200
+
+
+KEYWORD: restore
+Resets the data pointer to the start of the program
+
+    100 restore
+
+
+KEYWORD: repeat until
+Conditional loop, which is tested at the bottom.
+
+    100 count = 0
+    110 repeat
+    120 count = count + 1:print count
+    130 until count = 10
+
+
+KEYWORD: return
+Return from GOSUB call. You can make up your own death threats.
+
+    100 return
+
+
+KEYWORD: right$()
+Returns several characters from a string counting from the right
+
+    100 print right$("last four characters",4)
+
+
+KEYWORD: run
+Runs the current program after clearing variables as for CLEAR. Can also have a
+parameter which does a LOAD and then RUN
+
+    100 run
+    110 run "demo.bas"

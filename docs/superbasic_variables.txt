@@ -7,12 +7,12 @@ A name begins with an alphabetic character or underscore, and continues with
 either alphanumeric character or underscores. They may also have a type
 character ($ ( or #) e.g.
 
-| hello_world
-| count09
-| my_name_is_earl
-| name$
-| inventory(
-| mean_value#
+    hello_world
+    count09
+    my_name_is_earl
+    name$
+    inventory(
+    mean_value#
 
 This allows you to write readable code ; no more trying to remember what C7 is
 
@@ -38,9 +38,9 @@ characters up to 253 characters in length.
 
 These are some examples of variables being assigned those values.
 
-| 100 count = 42
-| 110 height# = 162.7
-| 120 name$ = "Jack Hobbs"
+    100 count = 42
+    110 height# = 162.7
+    120 name$ = "Jack Hobbs"
 
 
 ARRAYS
@@ -49,8 +49,8 @@ Arrays are a collection of variables, stored under one name. SuperBASIC
 supports up to two dimensions of arrays, with a maximum of 254 elements in
 each dimension. Arrays are indexed from zero.
 
-| 100 dim a$(3)
-| 110 a$(1) = "Entry 1"
-| 120 a$(3) = "Entry 3"
-| 130 dim grid(8,8)
-| 140 grid(4,3) = 42
+    100 dim a$(3)
+    110 a$(1) = "Entry 1"
+    120 a$(3) = "Entry 3"
+    130 dim grid(8,8)
+    140 grid(4,3) = 42

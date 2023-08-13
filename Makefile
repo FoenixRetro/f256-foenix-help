@@ -54,6 +54,8 @@ $(ZX02): src/tools/zx02/zx02.c src/tools/zx02/compress.c src/tools/zx02/memory.c
 
 bin/docs/docs_superbasic1.bin: bin/docs/superbasic_intro.bin bin/docs/superbasic_programs.bin bin/docs/superbasic_assembler.bin bin/docs/superbasic_variables.bin bin/docs/superbasic_procedures.bin
 bin/docs/docs_superbasic2.bin: bin/docs/superbasic_graphics.bin bin/docs/superbasic_sprites.bin bin/docs/superbasic_tiles.bin bin/docs/superbasic_sound.bin
+bin/docs/docs_superbasic3.bin: bin/docs/superbasic_ref_symbols.bin bin/docs/superbasic_ref_a_f.bin bin/docs/superbasic_ref_g_l.bin
+bin/docs/docs_superbasic4.bin: bin/docs/superbasic_ref_m_r.bin bin/docs/superbasic_ref_s_z.bin
 
 clean:
 	$(call DEL, bin/*.*)
@@ -62,9 +64,11 @@ clean:
 upload: bin/help.bin
 	python $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --binary bin/help.bin --address 2000
 
+upload_app: bin/help.bin
+	python $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=10 --flash bin/help.bin
+
 upload_docs: $(DOCS_PACKS)
 	python $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=11 --flash bin/docs/docs_superbasic1.bin
 	python $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=12 --flash bin/docs/docs_superbasic2.bin
-
-dump:
-	python $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --dump 2000 --count 1024
+	python $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=13 --flash bin/docs/docs_superbasic3.bin
+	python $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=14 --flash bin/docs/docs_superbasic4.bin

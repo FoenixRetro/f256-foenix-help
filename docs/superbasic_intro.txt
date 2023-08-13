@@ -34,7 +34,8 @@ MEMORY USAGE
 Memory usage is split into 2 parts.
 
 The main space from $2000-$7FFF contains the tokenised BASIC code. Keywords
-such as REPEAT are replaced by a single byte, or for less common options, by two bytes.
+such as REPEAT are replaced by a single byte, or for less common options, by
+two bytes.
 
 Identifiers are replaced by a reference into the identifier table from
 $1000-$1FFF. The first part of this table is a list of identifiers along with

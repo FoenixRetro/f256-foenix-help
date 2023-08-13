@@ -1,0 +1,226 @@
+
+KEYWORD: get() and get$()
+Wait for the next key press then , return either the character as a string, or
+as the ASCII character code.
+
+    100 print "Letter ";get$()
+
+
+KEYWORD: getdate$(n)
+Reads the current date from the clock returning a string in the format
+"dd:mm:yy". The parameter is ignored.
+
+    100 print "Today is ";getdate$(0)
+
+
+KEYWORD: gettime$(n)
+Reads the current time from the clock returning a string in the format
+"hh:mm:ss". The parameter is ignored.
+
+    100 print "It is now ";gettime$(0)
+
+
+KEYWORD: gfx
+Sends three parameter command directly to the graphics subsystem. Often the
+last two parameters are coordinates (not always).  It is not advised to use
+this for general use as programs would be somewhat unreadable.
+This is a direct call to the graphics library. The parameters are described in
+graphics.txt in the documents directory in the github. Use of this is rare.
+
+    100 gfx 22,130,100
+
+
+KEYWORD: gosub
+Call a routine at a given line number. This is provided for compatibility only.
+Do not use it except for typeins of old listings or I will hunt you down and
+torture you.
+
+    100 gosub 1000
+
+
+KEYWORD: goto
+Transfer execution to given line number. See GOSUB ; same result. If it's for
+typing in old programs, fair enough, but please don't use it for new code.
+
+    100 goto 666:rem "will happen if you use goto. you don’t need it"
+
+
+KEYWORD: hit()
+Tests if two sprites overlap. This is done using a box test based on the size
+of the sprite (e.g. 8x8,16x16,24x24,32x32)
+The value returned is zero for no collision, or the lower of the two coordinate
+differences from the centre, approximately.
+This only works if sprites are positioned via the graphics system ; there is no
+way of reading Sprite memory to ascertain where the physical sprites are.
+
+    100 print hit(1,2)
+
+
+KEYWORD: if then and if else endif
+If has two forms. The first is classic BASIC, e.g. if <condition> then
+<do something>. All the code is on one line. The THEN is mandatory - you cannot
+write if a = 2 goto 420 (say)
+
+    100 if name="benny" then my_iq = 70
+
+The second form is more complex. It allows multi line conditional execution,
+with an optional else clause. This is why there is a death threat attached to
+GOTO. This is better.  Note the endif is mandatory, you cannot use a single
+line if then else. The instruction does not have to all be on the same line.
+
+    100 if age < 18:print "child":else:print "adult":endif
+
+
+KEYWORD: image
+Draws a possibly scaled or flipped sprite image on the bitmap, using the
+standard syntax. Flipping is done using bits 7 and 6 of the mode
+(e.g. $80 and $40) in the colour option. This requires both sprites and bitmap
+to be on. For more information see the graphics section.
+
+    100 image 4 dim 3 colour 0,$80 to 100,100
+
+
+KEYWORD: inkey() and inkey$()
+If a character key has been pressed, return either the character as a string,
+or as the ASCII character code. If no key is available return "" or 0.
+This uses key presses, it does not detect if a key has been pressed, merely
+that it has been in the past. If you want to check whether a key is up or
+down, use keydown()
+
+    100 print inkey(),inkey$()
+
+
+KEYWORD: input
+Inputs numbers or strings from the keyboard.
+Input has always had a somewhat varying syntax historically. This version uses
+the same syntax as print, except that where there is a variable a value is
+entered into that variable, rather than the variable being printed.
+
+    100 input "Your name is ?";a$
+
+
+KEYWORD: int()
+Returns the integer part of a number
+
+    100 print int(3.14159)
+
+
+KEYWORD: isval()
+This is a support for val and takes the same parameter, a string  This deals
+with the problem with val() that it errors if you give it a non-numeric value.
+This checks to see if the string is a valid number  and returns -1 if so, 0
+if it is not.
+
+    100 print isval("42")
+    110 print isval("i like chips in gravy")
+
+
+KEYWORD: itemcount()
+Together , itemcount and itemget provide a way of encoding multiple data items
+in strings. A multiple-element string has a separating character, which can be
+any ASCII character, often a comma.
+itemcount() takes a string and a separator and returns the number of items in
+the string if separated by that separator. The example prints '2' as there are
+two elements separated by a comma, the strings hello and world.
+
+    100 print itemcount("hello,world",",")
+
+
+KEYWORD: itemget$()
+Together , itemcount and itemget provide a way of encoding multiple data items
+in strings. A multiple-element string has a separating character, which can be
+any ASCII character, often a comma.  itemget$() takes three parameters, the
+string, the index of the substring required, which starts at '1' and the
+separator. A bad index will generate a range error.
+The example will print 'lizzie', this being the third item.
+
+    100 print itemget$("paul,jane,lizzie,jack",3,",")
+
+
+
+KEYWORD: joyb()
+Returns a value indicating the status of the fire buttons on a gamepad, with
+the main fire button being bit 0. Takes a single parameter, the number of the
+gamepad.
+
+The keyboard keys ZX KM L (left/right/up/down/fire) are also mapped onto this
+controller, so a Game Controller is not required.
+
+    100 if joyb(0) & 1 then fire()
+
+
+KEYWORD: joyx() joyy()
+Returns the directional value of a gamepad in the x and y axes respectively as
+-1,0 or 1, with 1 being right and down. Each takes a single parameter which is
+the number of the pad.
+
+The keyboard keys ZX KM L (left/right/up/down/fire) are also mapped onto this
+controller, so a Game Controller is not required.
+
+    100 x = x + joyx(0)
+
+
+KEYWORD: keydown()
+Checks to see if a key is currently pressed or not - the parameter passed is
+the kernel raw key code. The demo below is also a simple program for
+identifying those raw key codes.
+
+    100 repeat
+    110 for i = 0 to 255
+    120 if keydown(i) then print "Key pressed ";i
+    130 next
+    140 until false
+
+
+KEYWORD: load
+Loads a BASIC program from the current drive.
+
+    load "game.bas"
+
+
+KEYWORD: left$()
+Returns several characters from a string counting from the left
+
+    100 print left$("mystring",4)
+
+
+KEYWORD: len()
+Returns the length of the string as an integer
+
+    100 print len("hello, world")
+
+
+KEYWORD: let
+Assignment statement. The LET is optional. You can also use @a where a is a
+reference ; so ptr = @a ; @ptr = 42 is the same in practice as a = 42.
+
+    100 let a = 42
+    110 a$="hello"
+    120 a#=22.7
+
+
+KEYWORD: line
+Draws a line, using the standard syntax which is explained in the
+graphics section.
+
+    100 line 100,100 colour $e0 to 200,200
+
+
+KEYWORD: list
+Lists the program.  It is possible to list any part of the program using the
+line numbers, or list a procedure by name.
+
+    100 list
+    110 list 1000
+    120 list 100,200
+    130 list ,400
+    140 list myfunction()
+
+
+KEYWORD: local
+Defines the list of variables (no arrays allowed) as local to the current
+procedure. The locals are initialised to an empty string or zero depending on
+their type.
+
+    100 local test$,count
+
