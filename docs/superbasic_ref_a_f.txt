@@ -40,7 +40,7 @@ Normally these are wrapped in a loop for the two passes for forward references.
     140 .forward:rts
     150 next
 
-This is almost identical to the BBC Microcomputer’s inline assembler.
+This is almost identical to the BBC Microcomputer's inline assembler.
 
 
 KEYWORD: assert
@@ -144,7 +144,7 @@ KEYWORD: event()
 Event tracks time. It is normally used to activate object movement or events
 in a game or other events, and generates true at predictable rates. It takes
 two parameters ; a variable and an elapsed time.
-If that variable is zero, then this function doesn’t return true until after
+If that variable is zero, then this function doesn't return true until after
 that many tenths of seconds has elapsed. If it is non-zero, it tracks repeated
 events, so if you have event(evt1,70) this will return true every second – the
 clock operates at the timer rate, 70Hz.

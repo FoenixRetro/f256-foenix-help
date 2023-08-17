@@ -14,7 +14,9 @@ extern struct call_args args;
 #pragma zpsym ("args")
 
 
-static uint8_t *_text_ptr;
+extern uint8_t *_text_ptr;
+#pragma zpsym("_text_ptr");
+
 static uint8_t _column;
 static uint8_t _row;
 static uint8_t _text_color;
@@ -39,21 +41,27 @@ void initialize(void) {
 	*FE_MMU_IO_CTRL = FE_PAGE_COLOR;
 	memset(FE_TEXT_MATRIX, 0x10, FE_TEXT_MATRIX_SIZE);
 
-	// A simple text color palette (black, white)
+	// A simple text color palette
 	*FE_MMU_IO_CTRL = FE_PAGE_REGISTERS;
-	FE_FOREGROUND_LUT[0] = 0;
-	FE_FOREGROUND_LUT[1] = 0;
-	FE_FOREGROUND_LUT[2] = 0;
-	FE_FOREGROUND_LUT[4] = 255;
-	FE_FOREGROUND_LUT[5] = 255;
-	FE_FOREGROUND_LUT[6] = 255;
+	FE_FOREGROUND_LUT[0] = 0x52;
+	FE_FOREGROUND_LUT[1] = 0x40;
+	FE_FOREGROUND_LUT[2] = 0x31;
+	FE_FOREGROUND_LUT[4] = 0xD8;
+	FE_FOREGROUND_LUT[5] = 0xD0;
+	FE_FOREGROUND_LUT[6] = 0xC9;
+	FE_FOREGROUND_LUT[8] = 255;
+	FE_FOREGROUND_LUT[9] = 255;
+	FE_FOREGROUND_LUT[10] = 255;
 
-	FE_BACKGROUND_LUT[0] = 0;
-	FE_BACKGROUND_LUT[1] = 0;
-	FE_BACKGROUND_LUT[2] = 0;
-	FE_BACKGROUND_LUT[4] = 255;
-	FE_BACKGROUND_LUT[5] = 255;
-	FE_BACKGROUND_LUT[6] = 255;
+	FE_BACKGROUND_LUT[0] = 0x52;
+	FE_BACKGROUND_LUT[1] = 0x40;
+	FE_BACKGROUND_LUT[2] = 0x31;
+	FE_BACKGROUND_LUT[4] = 0xD8;
+	FE_BACKGROUND_LUT[5] = 0xD0;
+	FE_BACKGROUND_LUT[6] = 0xC9;
+	FE_BACKGROUND_LUT[8] = 255;
+	FE_BACKGROUND_LUT[9] = 255;
+	FE_BACKGROUND_LUT[10] = 255;
 
 	// Make sure we are able to edit the active LUT
 	current = *FE_MMU_MEM_CTRL;

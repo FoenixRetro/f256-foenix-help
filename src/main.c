@@ -84,7 +84,6 @@ void draw_document_page(void) {
 			putnl();
 		else
 			putc(ptr0[0]);
-
 		++ptr0;
 	}
 
@@ -143,7 +142,7 @@ void document(void) {
 }
 
 
-static void draw_menu(void) {
+void draw_menu(void) {
 	clear();
 	title("Foenix Documentation");
 	at(0, 2);

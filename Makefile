@@ -4,13 +4,13 @@ ifeq ($(OS),Windows_NT)
 	MKDIR = md $(subst /,\,$(1))
 	COPY = copy $(subst /,\,$(1)) $(subst /,\,$(2))
 	ZX02 = bin\zx02.exe
+	PYTHON = python.exe
 else
-	UNAME_S := $(shell uname -s)
-
 	DEL = $(RM) -rf $(1)
 	MKDIR = mkdir -p $(1)
 	COPY = cp $(1) $(2)
 	ZX02 = bin/zx02
+	PYTHON = python3
 endif
 
 
@@ -20,12 +20,12 @@ C_OBJS := $(patsubst %.c, bin/%.o, $(C_SOURCES))
 ASM_SOURCES = src/f256_crt0.s src/f256_zx02.s src/header.s
 ASM_OBJS := $(patsubst %.s, bin/%.o, $(ASM_SOURCES))
 
-DOCS_PACKS = $(patsubst %.s, bin/%.bin, $(wildcard docs/*.s))
+DOC_PACKS = $(patsubst %.s, bin/%.bin, $(wildcard docs/*.s))
 
 
 .PHONY: all clean upload dump
 
-all: bin bin/help.bin $(DOCS_PACKS)
+all: bin bin/help.bin $(DOC_PACKS)
 
 bin:
 	$(call MKDIR, bin/src)
@@ -62,13 +62,13 @@ clean:
 	$(call DEL, bin/src/*.*)
 
 upload: bin/help.bin
-	python $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --binary bin/help.bin --address 2000
+	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --binary bin/help.bin --address 2000
 
 upload_app: bin/help.bin
-	python $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=10 --flash bin/help.bin
+	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=10 --flash bin/help.bin
 
-upload_docs: $(DOCS_PACKS)
-	python $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=11 --flash bin/docs/docs_superbasic1.bin
-	python $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=12 --flash bin/docs/docs_superbasic2.bin
-	python $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=13 --flash bin/docs/docs_superbasic3.bin
-	python $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=14 --flash bin/docs/docs_superbasic4.bin
+upload_docs: $(DOC_PACKS)
+	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=11 --flash bin/docs/docs_superbasic1.bin
+	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=12 --flash bin/docs/docs_superbasic2.bin
+	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=13 --flash bin/docs/docs_superbasic3.bin
+	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=14 --flash bin/docs/docs_superbasic4.bin

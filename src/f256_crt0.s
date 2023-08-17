@@ -3,7 +3,7 @@
     ;
     .export _exit, _event, _args
     .export __STARTUP__ : absolute = 1      ; Mark as start-up
-    .exportzp _index0, _index1, _ptr0
+    .exportzp _index0, _index1, _ptr0, __text_ptr
 
     .import initlib, donelib
     .import zerobss
@@ -65,6 +65,7 @@ _event:     .res    7
 _index0:    .res    1
 _index1:    .res    2
 _ptr0:      .res    2
+__text_ptr: .res    2
 
     .segment "KERNEL_ARGS" : zeropage
 _args:  .res    16

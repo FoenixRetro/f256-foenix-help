@@ -79,7 +79,7 @@ Binary modulus operator. The second value must be non-zero.
 
 KEYWORD: .
 Sets the following label to the current assembler address. So the example below
-sets the label ‘mylabel’ at the current address and you can write things like
+sets the label 'mylabel' at the current address and you can write things like
 bra mylabel. Note also that this is an integer variable.
 
     100 .mylabel

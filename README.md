@@ -1,2 +1,9 @@
-# foenix-help
-A documentation viewer for the F256 Jr/K
+# Foenix help!
+
+A help system for the Foenix F256 line of computers.
+
+## Usage
+
+
+## Building and Installing
+
