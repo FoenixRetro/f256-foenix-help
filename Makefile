@@ -58,8 +58,11 @@ bin/docs/docs_superbasic3.bin: bin/docs/superbasic_ref_symbols.bin bin/docs/supe
 bin/docs/docs_superbasic4.bin: bin/docs/superbasic_ref_m_r.bin bin/docs/superbasic_ref_s_z.bin
 
 clean:
-	$(call DEL, bin/*.*)
+	$(call DEL, bin/*.bin)
+	$(call DEL, bin/*.lbl)
+	$(call DEL, bin/*.map)
 	$(call DEL, bin/src/*.*)
+	$(call DEL, bin/docs/*.*)
 
 upload: bin/help.bin
 	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --binary bin/help.bin --address 2000
