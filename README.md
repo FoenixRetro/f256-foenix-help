@@ -31,3 +31,8 @@ A few tools are required to be able to build the program.
 For building we need a native GCC compiler, GNU Make, Python version 3 and the
 6502 compiler suite cc65. You will also need FoenixMgr to be able to transfere
 the program to your F256.
+
+After the code has been checked out, and all the dependencies installed, just
+type `make` to compile the program.
+
+Refere to the Makefile for other commands that are available.
