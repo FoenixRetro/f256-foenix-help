@@ -23,7 +23,7 @@ ASM_OBJS := $(patsubst %.s, bin/%.o, $(ASM_SOURCES))
 DOC_PACKS = $(patsubst %.s, bin/%.bin, $(wildcard docs/*.s))
 
 
-.PHONY: all clean upload dump
+.PHONY: all clean upload dump release
 
 all: bin bin/help.bin $(DOC_PACKS)
 
@@ -58,9 +58,7 @@ bin/docs/docs_superbasic3.bin: bin/docs/superbasic_ref_symbols.bin bin/docs/supe
 bin/docs/docs_superbasic4.bin: bin/docs/superbasic_ref_m_r.bin bin/docs/superbasic_ref_s_z.bin
 
 clean:
-	$(call DEL, bin/*.bin)
-	$(call DEL, bin/*.lbl)
-	$(call DEL, bin/*.map)
+	$(call DEL, bin/*.*)
 	$(call DEL, bin/src/*.*)
 	$(call DEL, bin/docs/*.*)
 
@@ -75,3 +73,8 @@ upload_docs: $(DOC_PACKS)
 	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=12 --flash bin/docs/docs_superbasic2.bin
 	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=13 --flash bin/docs/docs_superbasic3.bin
 	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=14 --flash bin/docs/docs_superbasic4.bin
+
+release: bin/help.bin $(DOC_PACKS)
+	$(call DEL, release/*.bin)
+	$(call COPY, bin/*.bin release)
+	$(call COPY, bin/docs/docs_*.bin release)
