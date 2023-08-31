@@ -238,6 +238,8 @@ initialize:
     lda     #' '
     jsr     fill
 
+    jsr     _home
+
     inc     $01                     ; fill color area
     lda     text_color
     jsr     fill
@@ -309,6 +311,7 @@ fill:
 ; Print character in A
 ;
     .proc _putc: near
+
     pha
     phy
     jsr     output_char
