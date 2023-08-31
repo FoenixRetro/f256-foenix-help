@@ -33,37 +33,37 @@ uint8_t document_page;
 uint8_t document_page_count;
 uint8_t current_link_index;
 
-document_pack_t* current_pack = (document_pack_t*)FE_TEMP_ADDR;
+document_pack_t* current_pack = (document_pack_t*)TEMP_ADDR;
 
 
 void title(const char* name) {
 	uint16_t len = strlen(name);
 
-	at(0, 0);
+	home();
 	color(0x01);
 	putc(' ');
 	putc(' ');
 	puts(name);
 
-	for (index1 = len + 2; index1 < 80; ++index1) {
+	for (index1 = len + 2; index1 < TEXT_WIDTH; ++index1) {
 		putc(' ');
 	}
 }
 
 void draw_document_footer(void) {
 	uint16_t len = strlen(current_pack->copyrights);
-	at(0, 59);
+	at(0, TEXT_HEIGHT - 1);
 	color(0x01);
 
 	putc(' ');
 	putc(' ');
 	puts(current_pack->copyrights);
 
-	for (index1 = len + 2; index1 < 80; ++index1) {
+	for (index1 = len + 2; index1 < TEXT_WIDTH; ++index1) {
 		putc(' ');
 	}
 
-	at(71, 59);
+	at(TEXT_WIDTH - 10, TEXT_HEIGHT - 1);
 	puti(document_page + 1);
 	putc('/');
 	puti(document_page_count);
@@ -80,10 +80,13 @@ void draw_document_page(void) {
 	ptr0 = document_page_start[document_page];
 
 	while (ptr0 != end) {
-		if (ptr0[0] == '\n')
-			putnl();
-		else
+		if (ptr0[0] == '\n') {
+			newline();
+		} else if (ptr0[0] == '\r') {
+			// Do nothing
+		} else {
 			putc(ptr0[0]);
+		}
 		++ptr0;
 	}
 
@@ -108,7 +111,7 @@ void document(void) {
 	while (ptr0 != end && index0 < 254) {
 		if (ptr0[0] == '\n') {
 			++line;
-			if (line == 56) {
+			if (line == (TEXT_HEIGHT - 3)) {
 				document_page_start[index0] = ptr0;
 				line = 0;
 				++index0;
@@ -149,7 +152,7 @@ void draw_menu(void) {
 	color(0x10);
 
 	document_count = 0;
-	for (index0 = FE_FLASH_SECTOR_START; index0 < FE_FLASH_SECTOR_END && document_count < DOC_LINK_COUNT; ++index0) {
+	for (index0 = FLASH_SECTOR_START; index0 < FLASH_SECTOR_END && document_count < DOC_LINK_COUNT; ++index0) {
 		map(index0);
 
 		if (current_pack->magic == 0xABD0) {
@@ -163,7 +166,7 @@ void draw_menu(void) {
 				putc(document_count + 'A');
 				puts(")   ");
 				puts(it->title);
-				putnl();
+				newline();
 
 				++document_count;
 				++it;
@@ -171,8 +174,8 @@ void draw_menu(void) {
 		}
 	}
 
-	putnl();
-	putnl();
+	newline();
+	newline();
 	puts("  Esc) Quit");
 }
 
@@ -201,6 +204,5 @@ void menu(void) {
 
 
 void main(void) {
-	initialize();
 	menu();
 }

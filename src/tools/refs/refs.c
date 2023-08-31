@@ -24,9 +24,9 @@ void print_escaped(FILE* file, char* str) {
 }
 
 int main(int argc, char* argv[]) {
-	FILE* input = fopen("docs/reference.txt", "r");
+	FILE* input = fopen("docs/superbasic_reference.txt", "r");
 	if (input == NULL) {
-		fprintf(stderr, "Could not load docs/reference.txt\n");
+		fprintf(stderr, "Could not load docs/superbasic_reference.txt\n");
 		goto done;
 	}
 
@@ -36,9 +36,9 @@ int main(int argc, char* argv[]) {
 		goto done;
 	}
 
-	FILE* doc = fopen("docs/reference_processed.txt", "w");
+	FILE* doc = fopen("docs/superbasic_reference_processed.txt", "w");
 	if (doc == NULL) {
-		fprintf(stderr, "Could not open docs/reference_processed.txt for writing\n");
+		fprintf(stderr, "Could not open docs/superbasic_reference_processed.txt for writing\n");
 		goto done;
 	}
 

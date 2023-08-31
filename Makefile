@@ -4,6 +4,7 @@ ifeq ($(OS),Windows_NT)
 	MKDIR = md $(subst /,\,$(1))
 	COPY = copy $(subst /,\,$(1)) $(subst /,\,$(2))
 	ZX02 = bin\zx02.exe
+	REFS = bin\refs.exe
 	PYTHON = python.exe
 else
 	DEL = $(RM) -rf $(1)
@@ -15,10 +16,10 @@ else
 endif
 
 
-C_SOURCES = src/main.c src/f256.c
+C_SOURCES = src/main.c
 C_OBJS := $(patsubst %.c, bin/%.o, $(C_SOURCES))
 
-ASM_SOURCES = src/f256_crt0.s src/f256_zx02.s src/header.s
+ASM_SOURCES = src/f256.s src/f256_zx02.s src/header.s
 ASM_OBJS := $(patsubst %.s, bin/%.o, $(ASM_SOURCES))
 
 DOC_PACKS = $(patsubst %.s, bin/%.bin, $(wildcard docs/*.s))
@@ -55,6 +56,9 @@ $(ZX02): src/tools/zx02/zx02.c src/tools/zx02/compress.c src/tools/zx02/memory.c
 
 $(REFS): src/tools/refs/refs.c
 	gcc -O2 -o $@ $^
+
+docs/superbasic_reference_processed.txt: $(REFS) docs/superbasic_reference.txt
+	$(REFS)
 
 bin/docs/docs_superbasic1.bin: bin/docs/superbasic_intro.bin bin/docs/superbasic_programs.bin bin/docs/superbasic_assembler.bin bin/docs/superbasic_variables.bin bin/docs/superbasic_procedures.bin
 bin/docs/docs_superbasic2.bin: bin/docs/superbasic_graphics.bin bin/docs/superbasic_sprites.bin bin/docs/superbasic_tiles.bin bin/docs/superbasic_sound.bin
