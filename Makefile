@@ -10,6 +10,7 @@ else
 	MKDIR = mkdir -p $(1)
 	COPY = cp $(1) $(2)
 	ZX02 = bin/zx02
+	REFS = bin/refs
 	PYTHON = python3
 endif
 
@@ -25,7 +26,7 @@ DOC_PACKS = $(patsubst %.s, bin/%.bin, $(wildcard docs/*.s))
 
 .PHONY: all clean upload dump release
 
-all: bin bin/help.bin $(DOC_PACKS)
+all: bin bin/help.bin $(DOC_PACKS) $(REFS)
 
 bin:
 	$(call MKDIR, bin/src)
@@ -50,6 +51,9 @@ bin/docs/%.bin: docs/%.s
 	ld65 -C docs/docs.cfg -o $@ $(basename $@).o -m $(basename $@).map -Ln $(basename $@).lbl
 
 $(ZX02): src/tools/zx02/zx02.c src/tools/zx02/compress.c src/tools/zx02/memory.c src/tools/zx02/optimize.c
+	gcc -O2 -o $@ $^
+
+$(REFS): src/tools/refs/refs.c
 	gcc -O2 -o $@ $^
 
 bin/docs/docs_superbasic1.bin: bin/docs/superbasic_intro.bin bin/docs/superbasic_programs.bin bin/docs/superbasic_assembler.bin bin/docs/superbasic_variables.bin bin/docs/superbasic_procedures.bin
