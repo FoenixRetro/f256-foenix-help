@@ -12,8 +12,10 @@
     .import zerobss
     .import copydata
     .import _main
+    .import decompress_start
     .import __STACKSTART__   ; From f256.cfg
     .import __END_LOAD__, __HIMEM__
+    .importzp src_ptr, dest_ptr
 
     HEAP = (__END_LOAD__ + $1fff) & $E000
     .global __heaporg
@@ -98,9 +100,9 @@ Start:
 
 
 _exit:
-    ; Disable the cursor
     stz $1
     stz $D010
+    stz $D001               ; restore font selection
 
     ; Restore the original stack pointer
     ldx spsave
@@ -142,11 +144,11 @@ initialize:
 
     lda     #$01
     sta     $D000                   ; text only display
-    ;lda     #$04
-    ;sta     $D001                   ; 320x240 @60Hz
-    stz     $D001                   ; 320x240 @60Hz
+    lda     #$20
+    sta     $D001                   ; 320x240 @60Hz with font set 1
     stz     $D004                   ; no borders
     stz     $D010                   ; no cursor
+
 
     ; Setup text color palette
     ldy     #0
@@ -169,6 +171,20 @@ initialize:
     ora     #$80
     ora     _index0
     sta     mmu::mem_ctrl
+
+
+    ; Load alternative 8x16 font
+    lda     #<font
+    sta     src_ptr
+    lda     #>font
+    sta     src_ptr+1
+    stz     dest_ptr
+    lda     #$c8
+    sta     dest_ptr+1
+
+    lda     #$01
+    sta     mmu::io_ctrl
+    jsr     decompress_start
 
 
     ; Clear screen
@@ -304,15 +320,35 @@ fill:
 
 
 output_char:
+    ; Write top half of character
     ldy     #$02
     sty     mmu::io_ctrl
     ldy     column
+    sta     (text_ptr),y
+    clc
+    adc     #128
+    pha
+
+    inc     mmu::io_ctrl
+    lda     text_color
+    sta     (text_ptr),y
+
+    ; Write bottom half of character
+    tya
+    clc
+    adc     #80
+    tay
+
+    dec     mmu::io_ctrl
+    pla
     sta     (text_ptr),y
 
     inc     mmu::io_ctrl
     lda     text_color
     sta     (text_ptr),y
 
+
+    ldy     column
     iny
     cpy     #80
     beq     _newline
@@ -328,7 +364,7 @@ output_char:
     stz     column
     inc     row
     lda     row
-    cmp     #60
+    cmp     #30
     beq     @at_bottom
 
     ldy     row
@@ -340,7 +376,7 @@ output_char:
     rts
 
 @at_bottom:
-    lda     #59
+    lda     #29
     sta     row
     rts
 
@@ -485,21 +521,24 @@ output_char:
 
     .endproc
 
+
+    .segment "RODATA"
+
 text_palette:
     ; Color b    g    r    a
     .byte   $79, $51, $00, $00
     .byte   $f9, $f0, $e0, $00
-    ;.byte   $52, $40, $31, $00
-    ;.byte   $d8, $d0, $c9, $00
     .byte   $ff, $ff, $ff, $00
 text_palette_len    = *-text_palette
 
 row_start_low:
-    .byte $00, $50, $a0, $f0, $40, $90, $e0, $30, $80, $d0, $20, $70, $c0, $10, $60, $b0, $00, $50, $a0, $f0
-    .byte $40, $90, $e0, $30, $80, $d0, $20, $70, $c0, $10, $60, $b0, $00, $50, $a0, $f0, $40, $90, $e0, $30
-    .byte $80, $d0, $20, $70, $c0, $10, $60, $b0, $00, $50, $a0, $f0, $40, $90, $e0, $30, $80, $d0, $20, $70
+    .byte $00, $a0, $40 ,$e0, $80, $20, $c0, $60, $00, $a0
+    .byte $40, $e0, $80, $20, $c0, $60, $00, $a0, $40, $e0
+    .byte $80, $20, $c0, $60, $00, $a0, $40, $e0, $80, $20
 row_start_high:
-    .byte $c0, $c0, $c0, $c0, $c1, $c1, $c1, $c2, $c2, $c2, $c3, $c3, $c3, $c4, $c4, $c4, $c5, $c5, $c5, $c5
-    .byte $c6, $c6, $c6, $c7, $c7, $c7, $c8, $c8, $c8, $c9, $c9, $c9, $ca, $ca, $ca, $ca, $cb, $cb, $cb, $cc
-    .byte $cc, $cc, $cd, $cd, $cd, $ce, $ce, $ce, $cf, $cf, $cf, $cf, $d0, $d0, $d0, $d1, $d1, $d1, $d2, $d2
+    .byte $c0, $c0, $c1, $c1, $c2, $c3, $c3, $c4, $c5, $c5
+    .byte $c6, $c6, $c7, $c8, $c8, $c9, $ca, $ca, $cb, $cb
+    .byte $cc, $cd, $cd, $ce, $cf, $cf, $d0, $d0, $d1, $d2
 
+font:
+    .incbin "../resources/font_compressed.bin"

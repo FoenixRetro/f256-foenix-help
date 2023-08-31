@@ -67,6 +67,7 @@ void draw_document_footer(void) {
 	puti(document_page + 1);
 	putc('/');
 	puti(document_page_count);
+
 	color(0x10);
 }
 

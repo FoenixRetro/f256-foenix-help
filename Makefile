@@ -40,6 +40,8 @@ bin/src/%.o: src/%.c
 bin/src/%.o: src/%.s
 	ca65 --cpu 65C02 -t none -o $@ -Isrc -l $(@:.o=.lst) $<
 
+bin/src/f256.o: resources/font_compressed.bin
+
 bin/help.bin: $(ASM_OBJS) $(C_OBJS)
 	ld65 -C src/f256.cfg -o $@ $(ASM_OBJS) $(C_OBJS) none.lib -m $(basename $@).map -Ln $(basename $@).lbl
 
@@ -50,6 +52,9 @@ bin/docs/%.bin: docs/%.txt $(ZX02)
 bin/docs/%.bin: docs/%.s
 	ca65 --cpu 65C02 -t none -o $(basename $@).o -Isrc -l $(basename $@).lst $<
 	ld65 -C docs/docs.cfg -o $@ $(basename $@).o -m $(basename $@).map -Ln $(basename $@).lbl
+
+resources/font_compressed.bin: resources/font.bin $(ZX02)
+	$(ZX02) -f $< $@
 
 $(ZX02): src/tools/zx02/zx02.c src/tools/zx02/compress.c src/tools/zx02/memory.c src/tools/zx02/optimize.c
 	gcc -O2 -o $@ $^

@@ -9,7 +9,7 @@
 #define TEMP_SIZE			(0x2000)
 
 #define TEXT_WIDTH			80
-#define TEXT_HEIGHT			60
+#define TEXT_HEIGHT			30
 
 #define KEY_UP				0x10
 #define KEY_DOWN			0x0E

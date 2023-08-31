@@ -12,15 +12,18 @@
 
 
               .export _decompress
+              .export decompress_start
               .export _decompress_get_end
+
+              .exportzp src_ptr, dest_ptr
 
               .include "zeropage.inc"
 
               .segment "ZEROPAGE"
 
 offset:       .res 2
-ZX0_src:      .res 2
-ZX0_dst:      .res 2
+src_ptr:      .res 2
+dest_ptr:     .res 2
 bitr:         .res 1
 pntr:         .res 2
 
@@ -29,8 +32,8 @@ pntr:         .res 2
 
               .proc _decompress_get_end: near
 
-              lda ZX0_dst
-              ldx ZX0_dst+1
+              lda dest_ptr
+              ldx dest_ptr+1
               rts
 
               .endproc
@@ -39,18 +42,19 @@ pntr:         .res 2
 ; Decompress ZX0 data (6502 optimized format)
 
 
-              .proc _decompress: near
+_decompress:
 
               ; Setup arguments
-              sta ZX0_dst
-              stx ZX0_dst+1
+              sta dest_ptr
+              stx dest_ptr+1
 
               ldy #$01
               lda (sp),y
-              sta ZX0_src+1
+              sta src_ptr+1
               lda (sp)
-              sta ZX0_src
+              sta src_ptr
 
+decompress_start:
               ldy #$00
               sty offset
               sty offset+1
@@ -63,14 +67,14 @@ pntr:         .res 2
 decode_literal:
               jsr   get_elias
 
-cop0:         lda   (ZX0_src), y
-              inc   ZX0_src
+cop0:         lda   (src_ptr), y
+              inc   src_ptr
               bne   :+
-              inc   ZX0_src+1
-:             sta   (ZX0_dst),y
-              inc   ZX0_dst
+              inc   src_ptr+1
+:             sta   (dest_ptr),y
+              inc   dest_ptr
               bne   :+
-              inc   ZX0_dst+1
+              inc   dest_ptr+1
 :             dex
               bne   cop0
 
@@ -81,10 +85,10 @@ cop0:         lda   (ZX0_src), y
 ;    Elias(length)
               jsr   get_elias
 dzx0s_copy:
-              lda   ZX0_dst
+              lda   dest_ptr
               sbc   offset  ; C=0 from get_elias
               sta   pntr
-              lda   ZX0_dst+1
+              lda   dest_ptr+1
               sbc   offset+1
               sta   pntr+1
 
@@ -93,10 +97,10 @@ cop1:
               inc   pntr
               bne   :+
               inc   pntr+1
-:             sta   (ZX0_dst),y
-              inc   ZX0_dst
+:             sta   (dest_ptr),y
+              inc   dest_ptr
               bne   :+
-              inc   ZX0_dst+1
+              inc   dest_ptr+1
 :             dex
               bne   cop1
 
@@ -116,10 +120,10 @@ dzx0s_new_offset:
               sta   offset+1
 
               ; Get low part of offset, a literal 7 bits
-              lda   (ZX0_src), y
-              inc   ZX0_src
+              lda   (src_ptr), y
+              inc   src_ptr
               bne   :+
-              inc   ZX0_src+1
+              inc   src_ptr+1
 :
               ; Divide by 2
               ror
@@ -151,10 +155,10 @@ elias_start:
               bne   elias_skip1
 
               ; Read new bit from stream
-              lda   (ZX0_src), y
-              inc   ZX0_src
+              lda   (src_ptr), y
+              inc   src_ptr
               bne   :+
-              inc   ZX0_src+1
+              inc   src_ptr+1
 :             ;sec   ; not needed, C=1 guaranteed from last bit
               rol
               sta   bitr
@@ -166,5 +170,3 @@ elias_skip1:
 exit:
               rts
 
-
-              .endproc
