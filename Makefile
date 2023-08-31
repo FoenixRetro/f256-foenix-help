@@ -86,10 +86,10 @@ clean:
 upload: bin/help.bin
 	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --binary bin/help.bin --address 2000
 
-upload_app: bin/help.bin
+flash_app: bin/help.bin
 	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=10 --flash bin/help.bin
 
-upload_docs: $(DOC_PACKS)
+flash_docs: $(DOC_PACKS)
 	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=11 --flash bin/docs/docs_superbasic1.bin
 	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=12 --flash bin/docs/docs_superbasic2.bin
 	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=13 --flash bin/docs/docs_superbasic_ref_1.bin
