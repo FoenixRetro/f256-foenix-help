@@ -21,7 +21,6 @@ copy of the actual identifier 'text' name, irrespective of how many times you
 use it. So there apart from that once, there is no space saving from using long
 identifier names.
 
-
 TYPES
 
 Variable in SuperBASIC are one of three types - integers, floating point and
@@ -41,7 +40,6 @@ These are some examples of variables being assigned those values.
     100 count = 42
     110 height# = 162.7
     120 name$ = "Jack Hobbs"
-
 
 ARRAYS
 

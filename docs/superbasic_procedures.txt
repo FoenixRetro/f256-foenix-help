@@ -9,7 +9,6 @@ However, they can be useful for running old code. SuperBASIC is not Microsoft
 BASIC compatible, but is close enough so that code will normally work with
 minor alterations.
 
-
 NAMED PROCEDURES
 
 The language supports named procedures, which are full identifiers.
@@ -52,7 +51,6 @@ If you have no parameters then the brackets must still be used e.g.
     130     print "You lose !"
     140 endproc
 
-
 WHILE AND REPEAT
 
 While and Repeat are a structured way of doing something repeatedly, until a
@@ -74,7 +72,6 @@ see which bit is repeated. You could do this with a repeat loop e.g.
 The difference between while and repeat loops is that the repeat loop is always
 done once - if the initial test on while fails, the repeated part will never be
 done at all.
-
 
 FOR LOOPS
 
@@ -102,7 +99,6 @@ There are two variations from common BASIC. Firstly there is currently no
 'STEP' ; you can only count either up by 1 , or down by 1. Secondly , some
 basics require the index in next (e.g. next i) and have peculiar behaviours
 if you change the order, which are not supported, nor should they be.
-
 
 IF ... ELSE ... ENDIF
 

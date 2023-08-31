@@ -176,7 +176,6 @@ void draw_menu(void) {
 	}
 
 	newline();
-	newline();
 	puts("  Esc) Quit");
 }
 

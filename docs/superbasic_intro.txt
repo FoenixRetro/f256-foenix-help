@@ -21,13 +21,11 @@ and RETURN are supported but this is more for backwards compatibility with
 older programs. It is advised to use Procedures, For/Next, While, Repeat and
 If/Else/Endif commands for better programming and clarity.
 
-
 STORAGE
 
 Programs are stored in ASCII format, so in cross development any editor can be
 used. LOAD, VERIFY and SAVE read and write files in this format. Internally the
 format is quite different.
-
 
 MEMORY USAGE
 
@@ -46,7 +44,6 @@ Arrays and allocated memory (using alloc() follow that).
 Finally string memory occupies the top of this memory area and works down.
 
 This should be entirely transparent to the developer.
-
 
 MEMORY USAGE ELSEWHERE
 

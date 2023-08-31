@@ -2,14 +2,12 @@
 SuperBASIC supports a single tile map, made up of 8x8 pixel images. A tile map
 can be up to 255 x 255 tiles in size.
 
-
 SETTING UP A TILE MAP
 
 The TILES command sets up a tile map. For example, the following command sets
 up a 48x48 tile map at the default locations (see below), and turns it on.
 
     100 tiles dim 48,48 on
-
 
 MANIPULATING A TILE MAP
 
@@ -30,7 +28,6 @@ the code at line 100, should be 11).
     100 tile at 4,5 draw 10,11 line 3,10
     110 tile to 14,12
     120 t = tile(5,5)
-
 
 DATA FORMATS
 
