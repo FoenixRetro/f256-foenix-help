@@ -40,11 +40,8 @@ bin/src/%.o: src/%.c
 bin/src/%.o: src/%.s
 	ca65 --cpu 65C02 -t none -o $@ -Isrc -l $(@:.o=.lst) $<
 
-bin/src/f256.o: resources/font_compressed.bin
-
 bin/help.bin: $(ASM_OBJS) $(C_OBJS)
 	ld65 -C src/f256.cfg -o $@ $(ASM_OBJS) $(C_OBJS) none.lib -m $(basename $@).map -Ln $(basename $@).lbl
-
 
 bin/docs/%.bin: docs/%.txt $(ZX02)
 	$(ZX02) -f $< $@
@@ -62,18 +59,29 @@ $(ZX02): src/tools/zx02/zx02.c src/tools/zx02/compress.c src/tools/zx02/memory.c
 $(REFS): src/tools/refs/refs.c
 	gcc -O2 -o $@ $^
 
-docs/superbasic_reference_processed.txt: $(REFS) docs/superbasic_reference.txt
-	$(REFS)
+docs/superbasic_reference_1_packed.txt: docs/superbasic_reference_1.txt $(REFS)
+	$(REFS) $< $@ src/superbasic_keywords_1.h 0
+
+docs/superbasic_reference_2_packed.txt: docs/superbasic_reference_2.txt $(REFS)
+	$(REFS) $< $@ src/superbasic_keywords_2.h 1
+
+
+src/main.c: docs/superbasic_reference_1_packed.txt docs/superbasic_reference_2_packed.txt src/superbasic_keywords_1.h src/superbasic_keywords_2.h
+bin/src/f256.o: resources/font_compressed.bin
 
 bin/docs/docs_superbasic1.bin: bin/docs/superbasic_intro.bin bin/docs/superbasic_programs.bin bin/docs/superbasic_assembler.bin bin/docs/superbasic_variables.bin bin/docs/superbasic_procedures.bin
 bin/docs/docs_superbasic2.bin: bin/docs/superbasic_graphics.bin bin/docs/superbasic_sprites.bin bin/docs/superbasic_tiles.bin bin/docs/superbasic_sound.bin
-bin/docs/docs_superbasic3.bin: bin/docs/superbasic_ref_symbols.bin bin/docs/superbasic_ref_a_f.bin bin/docs/superbasic_ref_g_l.bin
-bin/docs/docs_superbasic4.bin: bin/docs/superbasic_ref_m_r.bin bin/docs/superbasic_ref_s_z.bin
+bin/docs/docs_superbasic_ref_1.bin: bin/docs/superbasic_reference_1_packed.bin
+bin/docs/docs_superbasic_ref_2.bin: bin/docs/superbasic_reference_2_packed.bin
 
 clean:
 	$(call DEL, bin/*.*)
 	$(call DEL, bin/src/*.*)
 	$(call DEL, bin/docs/*.*)
+	$(call DEL, docs/superbasic_reference_1_packed.txt)
+	$(call DEL, docs/superbasic_reference_2_packed.txt)
+	$(call DEL, src/superbasic_keywords_1.h)
+	$(call DEL, src/superbasic_keywords_2.h)
 
 upload: bin/help.bin
 	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --binary bin/help.bin --address 2000
@@ -84,8 +92,8 @@ upload_app: bin/help.bin
 upload_docs: $(DOC_PACKS)
 	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=11 --flash bin/docs/docs_superbasic1.bin
 	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=12 --flash bin/docs/docs_superbasic2.bin
-	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=13 --flash bin/docs/docs_superbasic3.bin
-	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=14 --flash bin/docs/docs_superbasic4.bin
+	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=13 --flash bin/docs/docs_superbasic_ref_1.bin
+	$(PYTHON) $(FOENIXMGR)/FoenixMgr/fnxmgr.py --target f256k --flash-sector=14 --flash bin/docs/docs_superbasic_ref_2.bin
 
 release: bin/help.bin $(DOC_PACKS)
 	$(call DEL, release/*.bin)

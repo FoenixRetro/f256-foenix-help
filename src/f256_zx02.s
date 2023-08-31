@@ -54,6 +54,9 @@ _decompress:
               lda (sp)
               sta src_ptr
 
+              inc sp
+              inc sp
+
 decompress_start:
               ldy #$00
               sty offset
