@@ -1,6 +1,4 @@
 
-PROCEDURE AND VARIABLE NAMING
-
 SuperBASIC allows full naming of both variables and procedures
 (a type of 'subroutine').
 A name begins with an alphabetic character or underscore, and continues with
@@ -29,10 +27,10 @@ strings.
 By default a variable holds an integer, which is a number between about -2
 billion and +2 billion (technically it's a 32 bit integer).
 
-A variable name that ends with a \# holds a floating point number, or a
+A variable name that ends with a # holds a floating point number, or a
 decimal, which has a much larger range, but is less accurate, and slower.
 
-A variable name that ends with a \$ holds a string , which is a sequence of
+A variable name that ends with a $ holds a string , which is a sequence of
 characters up to 253 characters in length.
 
 These are some examples of variables being assigned those values.
