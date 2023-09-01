@@ -17,6 +17,7 @@
 #define KEY_RIGHT			0x06
 #define KEY_RETURN			0x0D
 #define KEY_BACKSPACE		0x08
+#define KEY_ESCAPE 			0x1B
 
 #define FLASH_SECTOR_START	0x40
 #define FLASH_SECTOR_END	0x78

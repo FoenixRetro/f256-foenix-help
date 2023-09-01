@@ -158,7 +158,7 @@ void document(void) {
 	while (true) {
 		char ch = getc();
 
-		if (ch == KEY_BACKSPACE) {
+		if (ch == KEY_BACKSPACE || ch == KEY_ESCAPE) {
 			return;
 		} else if (ch == KEY_DOWN) {	// down
 			if (document_page < document_page_count - 1) {
@@ -201,7 +201,7 @@ void reference(uint16_t ref_index) {
 	while (true) {
 		char ch = getc();
 
-		if (ch == KEY_BACKSPACE) {
+		if (ch == KEY_BACKSPACE || ch == KEY_ESCAPE) {
 			return;
 		}
 	}
@@ -244,16 +244,22 @@ void references(void) {
 	while (true) {
 		char ch = getc();
 
-		if (ch == KEY_BACKSPACE) {
+		if (ch == KEY_BACKSPACE || ch == KEY_ESCAPE) {
 			return;
 		}
 
 		if (ch >= 'a' && ch <= 'z') {
-			uint16_t index;
-			for (index = 0; index < current_keyword_len; ++index) {
-				if (current_keywords[index].name[0] == ch) {
-					index1 = keyword_select(index1, index);
-					break;
+			if (current_keywords[index1].name[0] == ch) {
+				if (index1 + 1 < current_keyword_len && current_keywords[index1 + 1].name[0] == ch) {
+					index1 = keyword_select(index1, index1 + 1);
+				}
+			} else {
+				uint16_t index;
+				for (index = 0; index < current_keyword_len; ++index) {
+					if (current_keywords[index].name[0] == ch) {
+						index1 = keyword_select(index1, index);
+						break;
+					}
 				}
 			}
 		} else if (ch == KEY_LEFT && index1 >= REF_COLUMN) {
@@ -323,7 +329,7 @@ void menu(void) {
 	while (true) {
 		char ch = getc();
 
-		if (ch == KEY_BACKSPACE) {
+		if (ch == KEY_BACKSPACE || ch == KEY_ESCAPE) {
 			return;
 		}
 
