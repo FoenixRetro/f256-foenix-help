@@ -24,7 +24,3 @@ EASY COMMANDS
 
 Four commands ZAP, SHOOT, PING and EXPLODE exist which play a simple sound
 effect.
-
-
-
-
