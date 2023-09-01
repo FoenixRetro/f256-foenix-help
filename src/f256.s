@@ -458,7 +458,7 @@ output_char:
 ; Taken from the page: https://beebwiki.mdfs.net/Number_output_in_6502_machine_code
 ;
     .proc _puti: near
-    rts
+
     ; Save _index1 value
     ldy     _index1
     phy
@@ -470,20 +470,38 @@ output_char:
     stx     _index1+1
 
     ldy     #8
-@lp1:
+@loop1:
     ldx     #$ff
     sec
-@lp2:
+@loop2:
     lda     _index1
-    sbc     @tens,y
+    sbc     @tens, y
     sta     _index1
 
     lda     _index1+1
-    sbc     @tens+1,y
+    sbc     @tens+1, y
     sta     _index1+1
 
     inx
-    bcs     @lp2                        ; loop until <0
+    bcs     @loop2                        ; loop until <0
+
+    lda     _index1
+    adc     @tens, y
+    sta     _index1
+    lda     _index1+1
+    adc     @tens+1, y
+    sta     _index1+1
+
+    txa
+    bne     @print_digit
+    bra     @next
+@print_digit:
+    ora     #'0'
+    jsr     output_char
+@next:
+    dey
+    dey
+    bpl     @loop1
 
 @done:
     ; Store _index1 value
