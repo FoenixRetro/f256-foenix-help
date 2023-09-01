@@ -312,7 +312,10 @@ void draw_menu(void) {
 			}
 		} else if (current_pack->magic == 0xABD1) {
 			// SuberBASIC Reference document
-			superbasic_keyword_slots[TEMP_ADDR[2]] = index0;
+			uint16_t index = TEMP_ADDR[2] | (TEMP_ADDR[3] << 8);
+			if (index < (sizeof(superbasic_keyword_slots) / sizeof(superbasic_keyword_slots[0]))) {
+				superbasic_keyword_slots[index] = index0;
+			}
 		}
 	}
 
