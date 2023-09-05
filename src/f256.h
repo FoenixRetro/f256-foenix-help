@@ -22,6 +22,9 @@
 #define FLASH_SECTOR_START	0x40
 #define FLASH_SECTOR_END	0x78
 
+#define MACHINE_F256_JR		0x02
+#define MACHINE_F256_K 		0x12
+
 void map(uint8_t sector);
 
 void home(void);
@@ -36,6 +39,8 @@ void puth8(uint8_t value);
 void puth16(uint16_t value);
 void puth32(uint32_t value);
 void newline(void);
+
+uint8_t get_machine_id(void);
 
 char getc(void);
 

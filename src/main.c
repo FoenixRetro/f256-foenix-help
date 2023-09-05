@@ -323,7 +323,12 @@ void draw_menu(void) {
 	puts("  X)   SuperBASIC Reference");
 	newline();
 	newline();
-	puts("  Esc) Quit");
+
+	if (get_machine_id() == MACHINE_F256_JR) {
+		puts("  Esc) Quit");
+	} else {
+		puts("    \x16) Quit");
+	}
 }
 
 void menu(void) {

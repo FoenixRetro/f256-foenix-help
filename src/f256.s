@@ -7,6 +7,7 @@
 
     .export _map, _home, _clear, _color, _getc, _newline
     .export _at, _putc, _puts, _puti, _puth8, _puth16
+    .export _get_machine_id
 
     .import initlib, donelib
     .import zerobss
@@ -46,6 +47,10 @@
     mem_ctrl    = $00
     io_ctrl     = $01
     lut         = $08
+.endscope
+
+.scope system
+    machineid   = $d6a7         ; Access machine id
 .endscope
 
 
@@ -520,6 +525,18 @@ output_char:
     .word   10000
     .endproc
 
+
+
+;
+; Return the machine id
+;
+    .proc _get_machine_id: near
+
+    stz     $01
+    ldx     #$00
+    lda     system::machineid
+
+    .endproc
 
 ;
 ; Wait for keypress, and return ascii code in A
