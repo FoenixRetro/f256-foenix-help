@@ -51,10 +51,6 @@ outputFilename = data.fileName
 spriteWidth = data.spriteWidth
 spriteHeight = data.spriteHeight
 
-print(spriteWidth)
-print(spriteHeight)
-
-
 local img = Image(spr.spec)
 img:drawSprite(spr, app.activeFrame)
 
