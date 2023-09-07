@@ -16,8 +16,10 @@
 #define KEY_LEFT			0x02
 #define KEY_RIGHT			0x06
 #define KEY_RETURN			0x0D
+#define KEY_SPACE 			0x20
 #define KEY_BACKSPACE		0x08
 #define KEY_ESCAPE 			0x1B
+#define KEY_RUN_STOP		0x03
 
 #define FLASH_SECTOR_START	0x40
 #define FLASH_SECTOR_END	0x78

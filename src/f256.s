@@ -535,6 +535,7 @@ output_char:
     stz     $01
     ldx     #$00
     lda     system::machineid
+    rts
 
     .endproc
 

@@ -63,6 +63,13 @@ keyword_t superbasic_keywords[] = {
 document_pack_t* current_pack = (document_pack_t*)TEMP_ADDR;
 
 
+bool is_back(char ch) {
+	return (ch == KEY_BACKSPACE) ||
+		   (ch == KEY_SPACE) ||
+		   (ch == KEY_RUN_STOP) ||
+		   (ch == KEY_ESCAPE);
+}
+
 void title(const char* name) {
 	uint16_t len = strlen(name);
 
@@ -158,7 +165,7 @@ void document(void) {
 	while (true) {
 		char ch = getc();
 
-		if (ch == KEY_BACKSPACE || ch == KEY_ESCAPE) {
+		if (is_back(ch)) {
 			return;
 		} else if (ch == KEY_DOWN) {	// down
 			if (document_page < document_page_count - 1) {
@@ -201,7 +208,7 @@ void reference(uint16_t ref_index) {
 	while (true) {
 		char ch = getc();
 
-		if (ch == KEY_BACKSPACE || ch == KEY_ESCAPE) {
+		if (is_back(ch)) {
 			return;
 		}
 	}
@@ -244,7 +251,7 @@ void references(void) {
 	while (true) {
 		char ch = getc();
 
-		if (ch == KEY_BACKSPACE || ch == KEY_ESCAPE) {
+		if (is_back(ch)) {
 			return;
 		}
 
@@ -301,9 +308,9 @@ void draw_menu(void) {
 				all_doc_links[document_count].segment = index0;
 				all_doc_links[document_count].index = it - current_pack->start_doc;
 
-				puts("  ");
+				puts("    ");
 				putc(document_count + 'A');
-				puts(")   ");
+				puts(")  ");
 				puts(it->title);
 				newline();
 
@@ -320,14 +327,14 @@ void draw_menu(void) {
 	}
 
 	newline();
-	puts("  X)   SuperBASIC Reference");
+	puts("    X)   SuperBASIC Reference");
 	newline();
 	newline();
 
 	if (get_machine_id() == MACHINE_F256_JR) {
-		puts("  Esc) Quit");
+		puts("  Esc)  Quit");
 	} else {
-		puts("    \x16) Quit");
+		puts(" STOP)  Quit");
 	}
 }
 
@@ -337,7 +344,7 @@ void menu(void) {
 	while (true) {
 		char ch = getc();
 
-		if (ch == KEY_BACKSPACE || ch == KEY_ESCAPE) {
+		if (is_back(ch)) {
 			return;
 		}
 
