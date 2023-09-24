@@ -259,8 +259,13 @@ void references(void) {
 
 		if (ch >= 'a' && ch <= 'z') {
 			if (current_keywords[index1].name[0] == ch) {
-				if (index1 + 1 < current_keyword_len && current_keywords[index1 + 1].name[0] == ch) {
-					index1 = keyword_select(index1, index1 + 1);
+				uint16_t index;
+				for (index = 0; index < current_keyword_len; ++index) {
+					uint16_t next = (index + index1 + 1) % current_keyword_len;
+					if (current_keywords[next].name[0] == ch) {
+						index1 = keyword_select(index1, next);
+						break;
+					}
 				}
 			} else {
 				uint16_t index;
