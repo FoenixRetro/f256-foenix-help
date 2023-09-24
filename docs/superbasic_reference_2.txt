@@ -198,6 +198,12 @@ empty brackets are mandatory even if there aren't any parameters
     140 endproc
 
 
+KEYWORD: ping
+Simple command that generate a simple sound effect
+
+    100 ping
+
+
 KEYWORD: rnd() random()
 Generates random numbers. this has two forms, which is still many fewer than
 odo. rnd() behaves like Microsoft basic, negative numbers set the seed,
@@ -341,6 +347,18 @@ erased and their control values set to zero.
     100 sprites at $18000 on
 
 
+KEYWORD: str$()
+Converts a string to a number, in signed decimal form.
+
+    100 print str$(42),str$(412.16)
+
+
+KEYWORD: shoot
+Simple command that generate a simple sound effect
+
+    100 shoot
+
+
 KEYWORD: stop
 Stops program with an error
 
@@ -401,6 +419,12 @@ code if it fails or 0 if successful. Currently supports BLOAD and BSAVE.
     110 print ec
 
 
+KEYWORD: true
+Returns the constant -1
+
+    100 true
+
+
 KEYWORD: val()
 Converts a number to a string. There must be some number there e.g. "-42xxx"
 works and returns 42 but "xxx" returns an error.  To make it useable use the
@@ -408,18 +432,6 @@ function isval() which checks to see if it is valid.
 
     100 print val("42")
     110 print val("413.22")
-
-
-KEYWORD: str$()
-Converts a string to a number, in signed decimal form.
-
-    100 print str$(42),str$(412.16)
-
-
-KEYWORD: true
-Returns the constant -1
-
-    100 true
 
 
 KEYWORD: verify
@@ -446,7 +458,8 @@ BASIC program, terminated with a character code >= 128, then these commands
 will Load or Load and then run that program.
 
 
-KEYWORD: zap ping shoot explode
-Simple commands that generate a simple sound effect
+KEYWORD: zap
+Simple command that generate a simple sound effect
 
-    100 ping:zap:explode
+    100 zap
+

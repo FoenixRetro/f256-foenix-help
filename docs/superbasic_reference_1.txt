@@ -301,6 +301,12 @@ An example is better, this prints Hello once a second.
     120 until false
 
 
+KEYWORD: explode
+Simple command that generate a simple sound effect
+
+    100 explode
+
+
 KEYWORD: false
 Returns the constant zero.
 
