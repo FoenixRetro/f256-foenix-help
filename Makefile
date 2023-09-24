@@ -34,11 +34,11 @@ bin:
 	$(call MKDIR, bin/docs)
 
 bin/src/%.o: src/%.c
-	cc65 --cpu 65C02 --standard cc65 -Osir -Cl -t none -Isrc -Igfx -o $(@:.o=.s) $<
-	ca65 --cpu 65C02 -o $@ -l $(@:.o=.lst) -t none -Isrc bin/$(<:.c=.s)
+	cc65 --cpu 6502 --standard cc65 -Osir -Cl -t none -Isrc -Igfx -o $(@:.o=.s) $<
+	ca65 --cpu 6502 -o $@ -l $(@:.o=.lst) -t none -Isrc bin/$(<:.c=.s)
 
 bin/src/%.o: src/%.s
-	ca65 --cpu 65C02 -t none -o $@ -Isrc -l $(@:.o=.lst) $<
+	ca65 -t none -o $@ -Isrc -l $(@:.o=.lst) $<
 
 bin/help.bin: $(ASM_OBJS) $(C_OBJS)
 	ld65 -C src/f256.cfg -o $@ $(ASM_OBJS) $(C_OBJS) none.lib -m $(basename $@).map -Ln $(basename $@).lbl

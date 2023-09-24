@@ -84,6 +84,8 @@ __heaplast:     .word   0
     .segment "END"       ; Defined for heap computation
 
 
+    .PC02
+
     .segment "STARTUP"
 Start:
     ; Disable interrupts

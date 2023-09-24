@@ -28,6 +28,8 @@ bitr:         .res 1
 pntr:         .res 2
 
 
+              .PC02
+
               .code
 
               .proc _decompress_get_end: near
