@@ -5,6 +5,7 @@
 
 #define DOC_LINK_COUNT 	25
 #define REF_COLUMN		29
+#define KEYWORD_SLOTS 	2
 
 typedef struct {
     const char* name;
@@ -53,7 +54,8 @@ uint8_t* current_keyword_slots;
 uint8_t current_loaded_slot;
 
 
-uint8_t superbasic_keyword_slots[2];
+bool has_superbasic_reference = false;
+uint8_t superbasic_keyword_slots[KEYWORD_SLOTS] = {0xFF, 0xFF};
 keyword_t superbasic_keywords[] = {
 	#include "superbasic_keywords_1.h"
 	#include "superbasic_keywords_2.h"
@@ -320,14 +322,22 @@ void draw_menu(void) {
 		} else if (current_pack->magic == 0xABD1) {
 			// SuberBASIC Reference document
 			uint16_t index = TEMP_ADDR[2] | (TEMP_ADDR[3] << 8);
-			if (index < (sizeof(superbasic_keyword_slots) / sizeof(superbasic_keyword_slots[0]))) {
+			if (index < KEYWORD_SLOTS) {
 				superbasic_keyword_slots[index] = index0;
 			}
 		}
 	}
 
-	newline();
-	puts("    X)   SuperBASIC Reference");
+	has_superbasic_reference = true;
+	for (index0 = 0; index0 < KEYWORD_SLOTS; ++index0) {
+		has_superbasic_reference &= superbasic_keyword_slots[index0] != 0xFF;
+	}
+
+	if (has_superbasic_reference) {
+		newline();
+		puts("    X)  SuperBASIC Reference");
+	}
+
 	newline();
 	newline();
 
@@ -354,7 +364,7 @@ void menu(void) {
 			current_link_index = ch - 'a';
 			document();
 			draw_menu();
-		} else if (ch == 'x') {
+		} else if (ch == 'x' && has_superbasic_reference) {
 			current_keyword_title = "SuperBASIC Reference";
 			current_keywords = superbasic_keywords;
 			current_keyword_len = sizeof(superbasic_keywords) / sizeof(keyword_t);
