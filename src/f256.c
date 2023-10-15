@@ -26,6 +26,7 @@ static bool _key_pressed[256];
 
 void initialize(void) {
 	uint8_t current, active;
+	uint8_t ram_block;
 	_text_ptr = FE_TEXT_MATRIX;
 	_column = 0;
 	_row = 0;
@@ -67,6 +68,12 @@ void initialize(void) {
 	current = *FE_MMU_MEM_CTRL;
 	active = current & 0x03;
 	*FE_MMU_MEM_CTRL = 0x80 | (active << 4) | active;
+
+	ram_block = FE_MMU_LUT[0];
+	FE_MMU_LUT[2]= ram_block++;
+	FE_MMU_LUT[3]= ram_block++;
+	FE_MMU_LUT[4]= ram_block++;
+	FE_MMU_LUT[5]= ram_block++;
 
 	memset(_key_pressed, 0, sizeof(_key_pressed));
 }

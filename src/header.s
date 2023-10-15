@@ -6,7 +6,7 @@
         COUNT = __END_LOAD__ >> 13   ; Assumes code starts at $2000.
 
         .byte   $f2,$56     ; signature
-        .byte   <COUNT      ; block count
+        .byte   <(COUNT+EXTRA_FLASH_BLOCKS) ; block count
         .byte   <SLOT       ; start slot
         .word   EXEC        ; exec addr
         .byte   1           ; header version
