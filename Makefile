@@ -13,7 +13,6 @@ else
 	PYTHON = python3
 endif
 
-DOC_BLOCKS = 4
 
 C_SOURCES = src/main.c src/f256.c
 C_OBJS := $(patsubst %.c, bin/%.o, $(C_SOURCES))
@@ -37,7 +36,7 @@ bin/src/%.o: src/%.c
 	ca65 --cpu 65C02 -o $@ -l $(@:.o=.lst) -t none -Isrc bin/$(<:.c=.s)
 
 bin/src/%.o: src/%.s
-	ca65 -D EXTRA_FLASH_BLOCKS=$(DOC_BLOCKS) --cpu 65C02 -t none -o $@ -Isrc -l $(@:.o=.lst) $<
+	ca65 --cpu 65C02 -t none -o $@ -Isrc -l $(@:.o=.lst) $<
 
 bin/help.bin: $(ASM_OBJS) $(C_OBJS)
 	ld65 -C src/f256.cfg -o $@ $(ASM_OBJS) $(C_OBJS) none.lib -m $(basename $@).map -Ln $(basename $@).lbl
