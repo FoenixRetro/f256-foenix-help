@@ -9,11 +9,7 @@
         .byte   <COUNT      ; block count
         .byte   <SLOT       ; start slot
         .word   EXEC        ; exec addr
-        .byte   1           ; header version
-        .byte   0           ; reserved
-        .byte   0           ; reserved
-        .byte   0           ; reserved
+        .word   0           ; version
+        .word   0           ; kernel
         .asciiz "help"      ; name
-        .asciiz ""          ; arguments
-        .asciiz "SuperBASIC help viewer." ; description
 
