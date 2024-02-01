@@ -125,7 +125,7 @@ void document(void) {
 	while (true) {
 		char ch = getc();
 
-		if (ch == 0x08 || ch == 0x1B) {
+		if (ch == 0x08) {
 			return;
 		} else if (ch == 0x0E) {	// down
 			if (document_page < document_page_count - 1) {
@@ -182,7 +182,7 @@ void menu(void) {
 	while (true) {
 		char ch = getc();
 
-		if (ch == 0x08 || ch == 0x1B) {
+		if (ch == 0x08) {
 			return;
 		}
 
