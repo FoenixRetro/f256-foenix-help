@@ -1,0 +1,465 @@
+KEYWORD: keydown()
+Checks to see if a key is currently pressed or not - the parameter passed is
+the kernel raw key code. The demo below is also a simple program for
+identifying those raw key codes.
+
+    100 repeat
+    110 for i = 0 to 255
+    120 if keydown(i) then print "Key pressed ";i
+    130 next
+    140 until false
+
+
+KEYWORD: load
+Loads a BASIC program from the current drive.
+
+    load "game.bas"
+
+
+KEYWORD: left$()
+Returns several characters from a string counting from the left
+
+    100 print left$("mystring",4)
+
+
+KEYWORD: len()
+Returns the length of the string as an integer
+
+    100 print len("hello, world")
+
+
+KEYWORD: let
+Assignment statement. The LET is optional. You can also use @a where a is a
+reference ; so ptr = @a ; @ptr = 42 is the same in practice as a = 42.
+
+    100 let a = 42
+    110 a$="hello"
+    120 a#=22.7
+
+
+KEYWORD: line
+Draws a line, using the standard syntax which is explained in the
+graphics section.
+
+    100 line 100,100 colour $e0 to 200,200
+
+
+KEYWORD: list
+Lists the program.  It is possible to list any part of the program using the
+line numbers, or list a procedure by name.
+
+    100 list
+    110 list 1000
+    120 list 100,200
+    130 list ,400
+    140 list myfunction()
+
+
+KEYWORD: local
+Defines the list of variables (no arrays allowed) as local to the current
+procedure. The locals are initialised to an empty string or zero depending on
+their type.
+
+    100 local test$,count
+
+
+KEYWORD: max() min()
+Returns the largest or smallest of the parameters, there can be any number of
+these (at least one). You can't mix strings and integers.
+
+    100 print max(3,42,5)
+
+
+KEYWORD: mdelta
+Gets the current delta status of the PS/2 mouse. 6 reference parameters
+(normally integer variables) are provided. These provide the cumulative mouse
+changes in the x,y,z axes, and the number of times the left, middle and right
+buttons have been pressed.
+
+    100 mdelta dx,dy,dz,lmb,mmb,rmb
+
+
+KEYWORD: memcopy
+This command is an interface to the F256 Junior's DMA hardware. A MEMCOPY
+command has several formats.
+The first in line 100 is a straight linear copy of memory from $10000 to $18000
+of length $4000. The second in line 110 is a linear fill from $10000 , to $4000
+bytes on, with the byte value $F7
+The third in line 120 is a rectangular area of memory, 64 x 48 pixels or bytes,
+from $10000. The 320 is the characters per line, normally 320 for the Junior.
+This copies a 2D area of screen memory rather than a linear one.
+The fourth, line 130 is a window, as defined, being filled with the byte
+pattern $18.
+The final shows an alternate way of showing addresses. This makes use of the
+knowledge that this normally video memory - it doesn't have to be of course
+- at 32,32 and at 128,128 later, convert to the addresses of those pixels in
+bitmap memory.
+
+    100 memcopy $10000,$4000 to $18000
+    110 memcopy $10000,$4000 poke $F7
+    120 memcopy $10000 rect 64,48 by 320 to $18000
+    130 memcopy $10000 rect 64,48 by 320 poke $18
+    140 memcopy at 32,32 rect 64,48 by 320 to at 128,128
+
+
+KEYWORD: mid$()
+Returns a subsegment of a string, given the start position
+(first character is 1) and the length, so mid$("abcdef",3,2) returns "cd".
+
+    100 print mid$("hello",2,3)
+    110 print mid$("another word",2,99)
+
+
+KEYWORD: mouse
+Gets the current status of the PS/2 mouse. 6 reference parameters
+(normally integer variables) are provided. These provide the current mouse
+position in the x,y,z axes, and the status of times the left, middle and
+right buttons.
+
+    100 mouse x,y,z,isx,isy,isz
+
+
+KEYWORD: new
+Erases the current program
+
+
+    100 new
+
+
+KEYWORD: not()
+Unary operator returning the logical not of its parameter, e.g. 0 if non-zero
+-1 otherwise.
+
+    100 print not(42)
+
+
+KEYWORD: option
+Option is used for general control functions which are not common enough to
+justify their own keyword.
+Option 0-7 set highlighting colours for Comment Foreground, Comment Background,
+Line Number, Token, Constant, Identifier, Punctuation, Data respectively, the
+lower 4 bits setting the colour. Setting the upper bit 7 will disable the
+background change. (The example sets the listing to all white)
+
+    100 for i = 0 to 7:option i,128+15:next
+
+
+KEYWORD: palette
+Sets the graphics palette. The parameters are the colour id and the red,
+green and blue graphics component. On start up, the palette is rrrgggbb
+
+    100 palette 1,255,128,0
+
+
+KEYWORD: peek[w/l/d]()
+The peek, peekw, peekl and peekd functions retrieve 1-4 bytes from the
+6502 memory space.
+
+    100 print peekd(42),peek(1)
+
+
+KEYWORD: playing()
+Returns true if a channel is currently playing a sound.
+
+    100 print playing(0)
+
+
+KEYWORD: plot
+Plot a point in the current colour using the standard syntax which is described
+in the graphics section.
+
+    100 plot to 100,200
+
+
+KEYWORD: poke[w/l/d]
+The poke, pokew, pokel and poked functions write one to four bytes to the
+6502 memory space.
+
+    100 poke 4096,1: pokew $c004,$a705
+
+
+KEYWORD: print
+Prints to the current output device, either strings or numbers (which are
+preceded by a space). Print a ' goes to the next line. Print a , goes to the
+next tab stop. A return is printed unless the command ends in ; or , .
+
+    100 print 42,"hello"'"world"
+
+
+KEYWORD: proc endproc
+Simple procedures. These should be used rather than gosub. Or else.  The
+empty brackets are mandatory even if there aren't any parameters
+(the aim is to use value parameters).
+
+    100 printmessage("hello",42)
+    110 end
+    120 proc printmessage(msg$,n)
+    130 print msg$+"world  x "+str$(n)
+    140 endproc
+
+
+KEYWORD: ping
+Simple command that generate a simple sound effect
+
+    100 ping
+
+
+KEYWORD: rnd() random()
+Generates random numbers. this has two forms, which is still many fewer than
+odo. rnd() behaves like Microsoft basic, negative numbers set the seed,
+0 repeats the last value, and positive numbers return an integer 0 <= n < 1.
+random(n) returns a number from 0 to n-1
+
+    100 print rnd(1),random(6)
+
+
+KEYWORD: read / data
+Reads from DATA statements the types must match. For syntactic consistency,
+string data must be in quote marks
+
+    100 read a$,b
+    110 data "hello world"
+    120 data 59
+
+
+KEYWORD: rect
+Draws a rectangle, using the standard syntax described in the graphics section
+
+    100 rect 100,100 colour $ff to 200,200
+
+
+KEYWORD: restore
+Resets the data pointer to the start of the program
+
+    100 restore
+
+
+KEYWORD: repeat until
+Conditional loop, which is tested at the bottom.
+
+    100 count = 0
+    110 repeat
+    120 count = count + 1:print count
+    130 until count = 10
+
+
+KEYWORD: return
+Return from GOSUB call. You can make up your own death threats.
+
+    100 return
+
+
+KEYWORD: right$()
+Returns several characters from a string counting from the right
+
+    100 print right$("last four characters",4)
+
+
+KEYWORD: run
+Runs the current program after clearing variables as for CLEAR. Can also have a
+parameter which does a LOAD and then RUN
+
+    100 run
+    110 run "demo.bas"
+
+
+KEYWORD: save
+Saves a BASIC program to the current drive.
+
+    save "game.bas"
+
+
+KEYWORD: setdate
+Sets the RTC to the given date ; the parameters are the day, month and
+year (00-99).
+
+    100 setdate 23,1,3
+
+
+KEYWORD: settime
+Sets the RTC to the given time ; the parameters are hours, minutes, seconds
+
+    100 settime 9,44,25
+
+
+KEYWORD: sgn()
+Returns the sign of an number, which is -1 0 or 1 depending on the value.
+
+    100 print sgn(42)
+
+
+KEYWORD: sound
+Generates a sound on one of the channels. There are four channels,
+corresponding to the. Channel 3 is a noise channel, channels 0-2 are simple
+square wave channels generating one note each.
+
+Sound has two forms
+
+    100 sound 1,500,10
+
+generates a sound of pitch 1000 which runs for about 10 timer ticks. The actual
+frequency is 111,563 / <pitch value>. The pitch value can be from 1 to 1023
+Sounds can be queued up , so you can play 3 notes in a row e.g.
+
+    100 sound 1,1000,20:sound 1,500,10:sound 1,250,20
+
+An adjuster value can be added which adds a constant to the pitch every tick,
+which allows the creation of some simple warpy effects, as in the ZAP command.
+
+    100 sound 1,500,10,10
+
+Creates a tone which drops as it plays (higher pitch values are lower
+frequency values)
+Channel 3 operates slightly differently. It generates noises which can be
+modulated by channel 2- see the SN76489 data sheet.
+However, there are currently 8 sounds, which are accessed by the pitch being
+16 times the sound number.
+
+    100 sound 3,6*16,10
+
+Is an explosiony sort of sound. You can just use the constant 96 of course
+instead. Finally this turns off all sound and empties the queues.
+Sound off
+
+
+KEYWORD: spc()
+Return a string consisting of a given number of spaces
+
+    100 a$ = spc(32)
+
+
+KEYWORD: sprite
+Manipulate one of the 64 hardware sprites using the standard modifiers. Also
+supported are sprite image <n> which turns a sprite on and selects image <n>
+to be used for it, and sprite off, which turns a sprite off. Sprite data is
+stored at $30000 onwards. Sprites cannot be scaled and flipped as the hardware
+does not permit it. Sprites have their own section. For Sprite .. To the sprite
+is centred on those coordinates.
+
+    100 sprite 4 image 2 to 50,200
+
+
+KEYWORD: sprites
+Enables and Disables all sprites,optionally setting the location of the sprite
+data in memory which default to $30000. When turned on, all the sprites are
+erased and their control values set to zero.
+
+    100 sprites at $18000 on
+
+
+KEYWORD: str$()
+Converts a string to a number, in signed decimal form.
+
+    100 print str$(42),str$(412.16)
+
+
+KEYWORD: shoot
+Simple command that generate a simple sound effect
+
+    100 shoot
+
+
+KEYWORD: stop
+Stops program with an error
+
+    100 stop
+
+
+KEYWORD: text
+Draws a possibly scaled or flipped string from the standard font on the bitmap,
+using the standard syntax. Flipping is done using bits 7 and 6 of the mode
+(e.g. $80 and $40) in the colour option,
+
+    100 text "hello" dim 2 colour 3 to 100,100
+
+
+KEYWORD: tile
+Manipulates the tile map. This allows you to set the scroll offset
+(with TO xscroll,yscroll) and draw on the time map using AT x,y to set the
+position and PLOT followed by a list of tiles, with a repeat option using
+LINE to draw on it. (In the examples, lines 110 and 120 do the same thing)
+
+    100 tile to 12,0
+    110 tile at 4,5 draw 10,11,11,11,10
+    120 tile at 4,5 draw 10,11 line 3,10
+
+
+KEYWORD: tile()
+Returns the tile at the given tile map position (not screen position)
+
+    100 print tile(2,3)
+
+
+KEYWORD: tiles
+Sets up the tile map. Allows the setting of the size of the tile map with
+DIM <width>,<height> and the location of the data with
+AT <map address>,<image address>, all addresses must be at the start of
+an 8k page.
+The defaults are 64 x 32 for the tile map and $24000 for the map - an array of
+words and $26000 for the images - an array of 8x8 byte graphics.
+Currently only 8x8 tiles are supported.
+
+    100 tiles on
+    110 tiles off
+    120 tiles dim 42,32 at $24000,$26000 on
+
+
+KEYWORD: timer()
+Returns the current value of the 70Hz Frame timer, which will wrap round in a
+couple of days.
+
+    100 print timer()
+
+
+KEYWORD: try
+Tries to execute a command, usually involving the Kernel, returning an error
+code if it fails or 0 if successful. Currently supports BLOAD and BSAVE.
+
+    100 try bload "myfile",$10000 to ec
+    110 print ec
+
+
+KEYWORD: true
+Returns the constant -1
+
+    100 true
+
+
+KEYWORD: val()
+Converts a number to a string. There must be some number there e.g. "-42xxx"
+works and returns 42 but "xxx" returns an error.  To make it useable use the
+function isval() which checks to see if it is valid.
+
+    100 print val("42")
+    110 print val("413.22")
+
+
+KEYWORD: verify
+Compares the current BASIC program to a program stored on the current drive.
+This command is deprecated at creation as it is a defensive measure against
+potential bugs in either the kernel, the kernel drivers, or BASIC itself.
+
+    verify "game.bas"
+
+
+KEYWORD: while wend
+Conditional loop with test at the top
+
+    100 islow = 0
+    110 while islow < 10
+    120 print islow
+    130 islow = islow + 1
+    140 wend
+
+
+KEYWORD: xload xgo
+These commands are for cross development in BASIC. If you store an ASCII
+BASIC program, terminated with a character code >= 128, then these commands
+will Load or Load and then run that program.
+
+
+KEYWORD: zap
+Simple command that generate a simple sound effect
+
+    100 zap
+

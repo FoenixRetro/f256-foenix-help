@@ -5,7 +5,6 @@ and optionally 2 further SID chips or SID chip clones.
 In SuperBASIC these are simplified, so the same tones are played on left or
 right channels simultaneously.
 
-
 CHANNELS
 
 There are four sound channels, numbered 0 to 3. 0 to 2 are simple square wave
@@ -21,12 +20,7 @@ Everything can be silenced with 'sound off'.
 It is possible to set a parameter to automatically change the pitch of the
 channel as it plays to allow easy creation of simple warpy sound effects.
 
-
 EASY COMMANDS
 
 Four commands ZAP, SHOOT, PING and EXPLODE exist which play a simple sound
 effect.
-
-
-
-
